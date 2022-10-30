@@ -1,0 +1,26 @@
+    {% extends "./PageVM.peb" %}
+    {% block content %}
+    <div class="grid-container full">
+        <div class="cell">
+            <table>
+                <thead>
+                <tr>
+                    <th width="150">Имя бизнесмена</th>
+                    <th width="150">Количество проектов</th>
+                    <th width="150">Подробная информация</th>
+                </tr>
+                </thead>
+                <tbody>
+                        {% for b in model.businessmans %}
+                    <tr>
+                        <td>{{ b.name }}</td>
+                        <td>{{ model.projectsCount[b.name] }}</td>
+                        <td><a href="/viewBusinessman/{{ b.id }}">Подробно</a></td>
+                    </tr>
+
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}

@@ -1,0 +1,32 @@
+    {% extends "./MainVM.peb" %}
+    {% block content %}
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="150">Имя инвестора</th>
+                        <th width="150">Проект</th>
+                        <th width="150">Дата инвестиции</th>
+                        <th width="150">Сумма инвестиции</th>
+                        <th width="150">Контакты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {% for investment in model.investments %}
+                        <tr>
+                            <td>{{ investment.invName }}</td>
+                            <td><a href="/viewProjects/{{ investment.project.id }}">{{ investment.project.name }}</a></td>
+                            <td>{{ investment.creationDate }}</td>
+                            <td>{{ investment.amount }}</td>
+                            <td>{{ investment.feedback }}</td>
+                        </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

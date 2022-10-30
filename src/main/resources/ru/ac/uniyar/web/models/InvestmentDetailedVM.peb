@@ -1,0 +1,39 @@
+    {% extends "./PageVM.peb" %}
+    {% block content %}
+
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <h2><a href="/viewProjects/{{ model.investment.project.id }}">Инвестиция в {{ model.investment.project.name }}</a></h2>
+            </div>
+            <div class="cell">
+                <hr class="rounded">
+            </div>
+            <div class="cell">
+                <div class="callout secondary">
+                    <h5>Инвестор</h5>
+                    <p>{{ model.investment.invName }}</p>
+                </div>
+            </div>
+            <div class="cell">
+                <div class="callout secondary">
+                    <h5>Дата инвестиции</h5>
+                    <p>{{ model.investment.creationDate  | date("yyyy-MM-dd")}}</p>
+                </div>
+            </div>
+            <div class="cell">
+                <div class="callout secondary">
+                    <h5>Обратная связь</h5>
+                    <p>{{ model.investment.feedback }}</p>
+                </div>
+            </div>
+            <div class="cell">
+                <div class="callout secondary">
+                    <h5>Сумма инвестиции</h5>
+                    <p>{{ model.investment.amount }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

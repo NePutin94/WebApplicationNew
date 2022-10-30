@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Совместное финансирование</title>
+    <link rel="stylesheet" href="/css/foundation.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="top-bar-left">
+        <ul class="dropdown menu" data-dropdown-menu>
+            <li class="menu-text">Совместное финансирование</li>
+            <li><a href="/">Главная страница</a></li>
+            <li>
+                <a href="#">Проекты</a>
+                <ul class="menu vertical">
+                    <li><a href="/viewProjects">Просмотр</a></li>
+                    <li><a href="/addProject">Добавить проект</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Инвестиции</a>
+                <ul class="menu vertical">
+                    <li><a href="/viewInvestment">Список инвестиций</a></li>
+                    <li><a href="/makeInvestment">Инвестировать в проект</a></li>
+                </ul>
+            </li>
+            <li><a href="/viewBusinessman">Предприниматели</a></li>
+            <li><a href="/help">Описание</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="grid-container">
+    <div class="grid-x grid-padding-x">
+        <p class="invisible">space</p>
+        <div class="large-12 cell">
+                {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+
+<script src="/js/vendor/jquery.js"></script>
+<script src="/js/vendor/what-input.js"></script>
+<script src="/js/vendor/foundation.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
