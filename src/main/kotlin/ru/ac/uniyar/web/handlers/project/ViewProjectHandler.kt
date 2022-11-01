@@ -10,8 +10,10 @@ import org.http4k.lens.int
 import org.http4k.lens.string
 import org.http4k.routing.path
 import org.http4k.template.ViewModel
+import org.ktorm.entity.toList
 import ru.ac.uniyar.domain.database.filters.makeProjectFilterExpr
 import ru.ac.uniyar.domain.operations.queries.*
+import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.filters.ProjectFilterParams
 import ru.ac.uniyar.web.filters.ProjectSearchFilter
 import ru.ac.uniyar.web.filters.lensOrNull
@@ -26,8 +28,7 @@ fun detailedProjectViewHandler(
     htmlView: BiDiBodyLens<ViewModel>
 ): HttpHandler =
     { request ->
-        val backUriField = Query.string().optional("backUri")
-        val backUri = backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
+        val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
         val projectId = request.path("id")!!
         val findProject = projectFetchOperation.fetch(projectId.toInt())!!
         val investments = listInvestmentOperation.listByProjectId(projectId.toInt())
@@ -39,7 +40,8 @@ fun detailedProjectViewHandler(
         val deltaDate = Duration.between(findProject.startDate, findProject.endDate).toDays()
         val amountPerDay = (totalAmount / deltaDate).toInt()
 
-        val successForecast = findProject.fundSize - remaining * amountPerDay <= 0
+        val successForecast =
+            if ((findProject.fundSize - totalAmount) - remaining * amountPerDay <= 0) "Проект будет успешен" else "Проект провалится"
         val uri = backUri ?: "/viewProjects"
 
         val viewModel = ProjectDetailedVM(
@@ -78,8 +80,10 @@ fun listProjectsViewHandler(
         val endDateL = lensOrNull(ProjectSearchFilter.endDateLField, request)?.atStartOfDay()
         val endDateR = lensOrNull(ProjectSearchFilter.endDateRField, request)?.atStartOfDay()
 
+        val projectIsClosed = ProjectSearchFilter.projectIsClosed(request)
+
         val filterExpr =
-            makeProjectFilterExpr(businessmanId?.id, fundSize, fundSizeSign, startDateL, startDateR, endDateL, endDateR)
+            makeProjectFilterExpr(businessmanId?.id, fundSize, fundSizeSign, startDateL, startDateR, endDateL, endDateR, projectIsClosed != null)
 
         val pageTotal = projectListOperation.getPagesCount { filterExpr }
         val index = Query.int().defaulted("page", 1)
@@ -93,15 +97,20 @@ fun listProjectsViewHandler(
                 page,
                 pageTotal,
                 ProjectFilterParams(
-                    businessman,
                     fundSizeStr,
                     startDateL?.toLocalDate(),
                     startDateR?.toLocalDate(),
-                    //request.uri.toString().replace("?", "*").replace("&", "~"),
+                    endDateL?.toLocalDate(),
+                    endDateR?.toLocalDate(),
                     bNames.map { it.name },
-                    businessman
+                    businessman,
+                    projectIsClosed == null
                 ),
-                request.uri.query.replace("&page=\\d+".toRegex(), "") //save search parameters and page when the page changes
+                request.uri.query.replace(
+                    "&page=\\d+".toRegex(),
+                    ""
+                ), //save search parameters and page when the page changes
+                request.uri.toString().replace("?", "*").replace("&", "~") //encoding a uri for bakuri
             )
 
         Response(Status.OK).with(htmlView of viewModel)

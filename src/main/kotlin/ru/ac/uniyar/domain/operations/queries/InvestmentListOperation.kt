@@ -23,8 +23,8 @@ class InvestmentListOperation(
         database
             .from(InvestmentTable)
             .joinReferencesAndSelect()
+            .orderBy(InvestmentTable.creationdate.desc())
             .where(filter)
-            .orderBy(InvestmentTable.creationdate.asc())
             .limit(pageIndex * pageSize, pageSize)
             .mapNotNull { row -> InvestmentTable.createEntity(row) }
 
@@ -32,17 +32,13 @@ class InvestmentListOperation(
         database
             .from(InvestmentTable)
             .joinReferencesAndSelect()
+            .orderBy(InvestmentTable.creationdate.desc())
             .mapNotNull { row -> InvestmentTable.createEntity(row) }
 
     fun listByProjectId(projectId: Int): List<Investment> =
         database.from(InvestmentTable).joinReferencesAndSelect()
             .where { InvestmentTable.project eq projectId }
-            .mapNotNull { row -> InvestmentTable.createEntity(row) }
-
-    fun listByProjectId(projectId: Int, s: Int, e: Int): List<Investment> =
-        database.from(InvestmentTable).joinReferencesAndSelect()
-            .where { InvestmentTable.project eq projectId }
-            .limit(s, e)
+            .orderBy(InvestmentTable.creationdate.desc())
             .mapNotNull { row -> InvestmentTable.createEntity(row) }
 
     fun getTotalCount(filter: () -> ColumnDeclaring<Boolean>) = database

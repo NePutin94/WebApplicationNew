@@ -22,8 +22,9 @@ fun detailedInvestmentViewHandler(
 ): HttpHandler =
     { request ->
         val investId = request.path("id")!!.toInt()
+        val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
         val investment = investmentFetchOperation.fetch(investId)!!
-        val viewModel = InvestmentDetailedVM(investment)
+        val viewModel = InvestmentDetailedVM(investment, backUri ?: "/viewInvestment")
         Response(Status.OK).with(htmlView of viewModel)
     }
 

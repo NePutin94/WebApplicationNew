@@ -31,7 +31,7 @@
                                             <thead>
                                             <tr>
                                                 <th width="150">Размер фонда</th>
-                                                <th width="150">Дата создания</th>
+                                                <th width="150">Дата старта</th>
                                                 <th width="150">Дата закрытия</th>
                                                 <th width="150">Сумма инвестиций</th>
                                             </tr>
@@ -39,7 +39,7 @@
                                             <tbody>
                                             <tr>
                                                 <td>{{ project.fundSize }}</td>
-                                                <td>{{ project.creationDate | date("yyyy-MM-dd")}}</td>
+                                                <td>{{ project.startDate | date("yyyy-MM-dd")}}</td>
                                                 <td>{{ project.endDate | date("yyyy-MM-dd")}}</td>
                                                 <td>{{ model.projectsInvestSum[project.name] }}</td>
                                             </tr>
@@ -61,7 +61,7 @@
                                     <thead>
                                     <tr>
                                         <th width="150">Размер фонда</th>
-                                        <th width="150">Дата создания</th>
+                                        <th width="150">Дата старта</th>
                                         <th width="150">Дата закрытия</th>
                                         <th width="150">Сумма инвестиций</th>
                                     </tr>
@@ -69,7 +69,7 @@
                                     <tbody>
                                     <tr>
                                         <td>{{ project.fundSize }}</td>
-                                        <td>{{ project.creationDate | date("yyyy-MM-dd")}}</td>
+                                        <td>{{ project.startDate | date("yyyy-MM-dd")}}</td>
                                         <td>{{ project.endDate | date("yyyy-MM-dd")}}</td>
                                         <td>{{ model.projectsInvestSum[project.name] }}</td>
                                     </tr>

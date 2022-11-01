@@ -11,7 +11,7 @@ data class ProjectDetailedVM(
     val AmountCollected : Int,
     val RemainingTime : Long,
     val NumberInvestments : Int,
-    val SuccessForecast : Boolean,
+    val SuccessForecast : String,
     val AmountPerDat : Int,
     val IsClosed : Boolean
 ) : ViewModel

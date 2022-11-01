@@ -30,11 +30,3 @@ object InvestmentTable : Table<Investment>("PROJECTINVESTMENTS") {
     val feedback = varchar("FEEDBACK").bindTo { it.feedback }
     val amount = int("AMOUNT").bindTo { it.amount }
 }
-
-data class Test(val id: Int, val name: String?, val amount: Int)
-
-object TestTable : Table<Nothing>("TEST") {
-    val id = int("ID").primaryKey()
-    val name = varchar("NAME")
-    val amount = int("AMOUNT")
-}

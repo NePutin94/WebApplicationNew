@@ -9,5 +9,6 @@ data class ProjectListVM(
     val pageIndex: Int,
     val pageCount: Int,
     val projectFilterParams: ProjectFilterParams,
-    val searchUriParams : String?
+    val searchUriParams : String?,
+    val uri4BackUri : String?
 ) : ViewModel

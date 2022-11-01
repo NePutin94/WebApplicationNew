@@ -12,7 +12,8 @@ fun makeProjectFilterExpr(
     startDateL: LocalDateTime?,
     startDateR: LocalDateTime?,
     endDateL: LocalDateTime?,
-    endDateR: LocalDateTime?
+    endDateR: LocalDateTime?,
+    projectIsColsed: Boolean
 ): ColumnDeclaring<Boolean> {
     var filterExpr: ColumnDeclaring<Boolean> = ProjectTable.id eq 0 or true //always true
     if (businessmanId != null) {
@@ -38,6 +39,11 @@ fun makeProjectFilterExpr(
             filterExpr.and(ProjectTable.startdate between startDateL..startDateR)
     if (endDateL != null && endDateR != null)
         filterExpr =
-            filterExpr.and(ProjectTable.startdate between endDateL..endDateR)
+            filterExpr.and(ProjectTable.enddate between endDateL..endDateR)
+    if (projectIsColsed) {
+        val time = LocalDateTime.now()
+        filterExpr =
+            filterExpr.and(ProjectTable.enddate lessEq time)
+    }
     return filterExpr
 }

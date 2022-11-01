@@ -3,6 +3,7 @@ package ru.ac.uniyar.domain.operations.queries
 import org.ktorm.database.Database
 import org.ktorm.database.asIterable
 import org.ktorm.dsl.*
+import org.ktorm.entity.*
 import org.ktorm.schema.ColumnDeclaring
 import ru.ac.uniyar.Project
 import ru.ac.uniyar.domain.database.ProjectTable
@@ -24,7 +25,8 @@ class ProjectListOperation(
             .from(ProjectTable)
             .joinReferencesAndSelect()
             .where(filter)
-            .orderBy(ProjectTable.enddate.asc())
+            .orderBy(ProjectTable.startdate.desc()) //eq database.projects.sortedBy({it.enddate.desc()}, {it.startdate.desc()}).toList()
+            .orderBy(ProjectTable.enddate.desc())
             .limit(pageIndex * pageSize, pageSize)
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
@@ -32,6 +34,8 @@ class ProjectListOperation(
         database
             .from(ProjectTable)
             .joinReferencesAndSelect()
+            .orderBy(ProjectTable.startdate.desc())
+            .orderBy(ProjectTable.enddate.desc())
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
     fun listProjectNames(): List<String> =

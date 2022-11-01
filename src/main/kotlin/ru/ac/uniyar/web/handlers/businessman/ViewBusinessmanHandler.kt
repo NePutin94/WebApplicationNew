@@ -15,6 +15,7 @@ import ru.ac.uniyar.domain.operations.queries.BusinessmanListOperation
 import ru.ac.uniyar.domain.operations.queries.BusinessmanFetchOperation
 import ru.ac.uniyar.domain.operations.queries.InvestmentFetchOperation
 import ru.ac.uniyar.domain.operations.queries.ProjectListOperation
+import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.models.businessman.BusinessmanListVM
 import ru.ac.uniyar.web.models.businessman.BusinessmenDetailedVM
 import java.time.LocalDateTime
@@ -25,7 +26,6 @@ fun listBusinessmanViewHandler(
     htmlView: BiDiBodyLens<ViewModel>
 ): HttpHandler =
     { request ->
-
         val businessmans = businessmanListOperation.list()
         val projectsCount: MutableMap<String, Int> = mutableMapOf()
         for (p in businessmans) {
@@ -44,8 +44,7 @@ fun detailedBusinessmanHandler(
     htmlView: BiDiBodyLens<ViewModel>
 ): HttpHandler =
     { request ->
-        val backUriField = Query.string().optional("backUri")
-        val backUri = backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
+        val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
         val businessmanId = request.path("id")!!
         val listOfProject = projectListOperation.listByBusinessmanId(businessmanId.toInt())
         val businessman = businessmanFetchOperation.fetch(businessmanId.toInt())!!

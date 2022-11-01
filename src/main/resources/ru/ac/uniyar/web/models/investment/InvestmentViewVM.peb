@@ -16,7 +16,7 @@
                                        value="{{model.investmentFilterParams.startDateR }}">
                             </div>
                             <div class="cell small-3">
-                                Дата начала
+                                Дата инвестиции
                             </div>
                         </div>
                     </div>
@@ -38,23 +38,19 @@
                 <table>
                     <thead>
                     <tr>
-                        <th width="150">Имя инвестора</th>
                         <th width="150">Проект</th>
                         <th width="150">Дата инвестиции</th>
-                        <th width="150">Сумма инвестиции</th>
-                        <th width="150">Контакты</th>
+                        <th width="150">Подробно</th>
                     </tr>
                     </thead>
                     <tbody>
                             {% for investment in model.investments %}
                         <tr>
-                            <td>{{ investment.invName }}</td>
                             <td>
                                 <a href="/viewProjects/{{ investment.project.id }}?backUri={{ model.uri4BackUri }}">{{ investment.project.name }}</a>
                             </td>
-                            <td>{{ investment.creationDate }}</td>
-                            <td>{{ investment.amount }}</td>
-                            <td>{{ investment.feedback }}</td>
+                            <td>{{ investment.creationDate | date("yyyy-MM-dd', 'HH:mm") }}</td>
+                            <td><a href="/viewInvestment/{{ investment.id }}?backUri={{ model.uri4BackUri }}">Подробно</a></td>
                         </tr>
                             {% endfor %}
                     </tbody>
@@ -80,22 +76,4 @@
             {% endif %}
         </ul>
     </nav>
-    <form method="GET">
-        <div class="grid-container full">
-            <div class="grid-x grid-margin-x small-up-3 medium-up-5">
-                <div class="cell small-3">
-                </div>
-                <div class="cell small-3">
-                </div>
-                <div class="cell small-3">
-                    <label>
-                        <input type="number" name="page" placeholder="Всего страниц {{ model.pageCount }}">
-                    </label>
-                </div>
-                <div class="cell small-3">
-                    <button class="button">Перейти</button>
-                </div>
-            </div>
-        </div>
-    </form>
     {% endblock %}

@@ -12,9 +12,6 @@
         <div class="grid-container full">
             <div class="grid-y grid-padding-x">
                 <div class="medium-6 cell">
-                    <input type="text" placeholder="Название проекта" name="name" value="{{model.form.fields["name"] | first}}">
-                </div>
-                <div class="medium-6 cell">
                     <div class="grid-x">
                         <div class="cell small-2">
                             Имя предпринимателя
@@ -38,6 +35,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="medium-6 cell">
+                    <input type="text" placeholder="Название проекта" name="name" value="{{model.form.fields["name"] | first}}">
                 </div>
                 <div class="medium-6 cell">
                     <textarea placeholder="Описание"

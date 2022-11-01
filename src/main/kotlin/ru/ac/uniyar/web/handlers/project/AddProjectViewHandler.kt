@@ -6,18 +6,13 @@ import org.http4k.core.Status
 import org.http4k.core.with
 import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.Query
-import org.http4k.lens.WebForm
 import org.http4k.lens.string
 import org.http4k.template.ViewModel
-import ru.ac.uniyar.Businessman
 import ru.ac.uniyar.Project
-import ru.ac.uniyar.domain.operations.commands.BusinessmanAddOperation
 import ru.ac.uniyar.domain.operations.commands.ProjectAddOperation
-import ru.ac.uniyar.domain.operations.queries.BusinessmanFetchOperation
 import ru.ac.uniyar.domain.operations.queries.BusinessmanListOperation
 import ru.ac.uniyar.web.filters.ProjectFilters
 import ru.ac.uniyar.web.models.project.ProjectAddVM
-import ru.ac.uniyar.web.models.ProjectVM
 import java.time.LocalDateTime
 
 fun addProjectViewHandler(

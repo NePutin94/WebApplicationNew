@@ -42,6 +42,7 @@ fun startDbServer(): H2DatabaseManager {
     val databaseManager = H2DatabaseManager().initialize()
     println("Веб-интерфейс базы данных доступен по адресу http://localhost:${H2DatabaseManager.WEB_PORT}")
     println("Введите любую строку, чтобы завершить работу приложения")
+    //if filling is used, it is better to clear the database first
     databaseManager.dropAll()
     performMigrations()
     return databaseManager
@@ -61,6 +62,7 @@ fun startApplication() {
     val db = connectToDatabase()
     val opHolder = OperationHolder(db)
 
+    //filling the database
     fill(opHolder)
 
     startWebServer(opHolder)

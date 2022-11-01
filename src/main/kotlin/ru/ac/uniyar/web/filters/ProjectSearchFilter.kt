@@ -4,12 +4,14 @@ import org.http4k.lens.*
 import java.time.LocalDate
 
 data class ProjectFilterParams(
-    val businessman: String?,
     val fundSize: String?,
     val startDateL: LocalDate?,
     val startDateR: LocalDate?,
+    val endDateL: LocalDate?,
+    val endDateR: LocalDate?,
     val businessmanNames : List<String>,
-    val selectedBName : String?
+    val selectedBName : String?,
+    val projectIsClosed : Boolean?
 )
 
 class ProjectSearchFilter {
@@ -20,5 +22,6 @@ class ProjectSearchFilter {
         val startDateRField = Query.localDate().optional("startDateR")
         val endDateLField = Query.localDate().optional("endDateL")
         val endDateRField = Query.localDate().optional("endDateR")
+        val projectIsClosed = Query.string().optional("projectIsClosed")
     }
 }

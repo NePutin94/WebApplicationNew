@@ -1,29 +1,53 @@
     {% extends "../PageVM.peb" %}
     {% block content %}
+    <form id="FormSelectName" method="GET"></form>
 
     <form method="GET">
         <div class="grid-x">
             <div class="cell small-6">
                 <div class="grid-y small-up-2">
                     <div class="cell">
+                        <div class="grid-container full">
+                            <div class="grid-x grid-margin-x">
+                                <div class="cell small-4">
+                                    <div class="switch">
+                                        <input class="switch-input" id="projectIsClosed" type="checkbox"
+                                            {% if not model.projectFilterParams.projectIsClosed %}
+                                               checked
+                                            {% endif %}
+                                               name="projectIsClosed">
+                                        <label class="switch-paddle" for="projectIsClosed">
+                                            <span class="show-for-sr"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="cell small-7">
+                                    Проект закрытый?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell">
                         <button class="button" type="button"
-                                data-toggle="example-dropdown2">{{model.projectFilterParams.selectedBName}}</button>
+                                data-toggle="example-dropdown2"
+                                form="FormSelectName">{{model.projectFilterParams.selectedBName}}</button>
                         <div class="dropdown-pane top" id="example-dropdown2" data-dropdown>
                             <div class="grid-y grid-margin-y">
-                                    {% for businessman in model.projectFilterParams.businessmanNames %}
+                                {% for businessman in model.projectFilterParams.businessmanNames %}
                                     <div class="cell">
-                                        <input type="submit" name="businessman" value="{{businessman}}"/>
+                                        <input type="submit" name="businessman" value="{{businessman}}"
+                                               form="FormSelectName"/>
                                     </div>
-                                    {% endfor %}
+                                {% endfor %}
                                 <div class="cell">
-                                    <input type="submit" name="businessman" value="Select all"/>
+                                    <input type="submit" name="businessman" value="Select all" form="FormSelectName"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="cell">
                         <label>
-                            <input type="text" name="fundSize" placeholder="[>,<]fund size"
+                            <input type="text" name="fundSize" placeholder="[>,<]размер фонда"
                                    value="{{ model.projectFilterParams.fundSize }}">
                         </label>
                     </div>
@@ -51,12 +75,12 @@
                         <div class="grid-x grid-margin-x">
                             <div class="cell small-3">
                                 <input type="date" placeholder="Дата начала" name="endDateL"
-                                       value="{{model.projectFilterParams.startDateL }}">
+                                       value="{{model.projectFilterParams.endDateL }}">
                             </div>
                             --
                             <div class="cell small-3">
                                 <input type="date" placeholder="Дата начала" name="endDateR"
-                                       value="{{model.projectFilterParams.startDateR }}">
+                                       value="{{model.projectFilterParams.endDateR }}">
                             </div>
                             <div class="cell small-3">
                                 Дата окончания
@@ -95,8 +119,8 @@
                                 {% else %}
                                 <p>{{ project.description}}</p>
                             {% endif %}
-
-                            <a href="/viewProjects/{{ project.id }}">Подробная информация.</a>
+                            <a href="/viewProjects/{{ project.id }}?backUri={{ model.uri4BackUri }}">Подробная
+                                информация.</a>
                         </div>
                     </div>
                 </div>
@@ -116,27 +140,10 @@
             {% endif %}
             <li><a href="#" class="disabled" aria-label="Страница  {{ model.pageIndex}}">{{ model.pageIndex}}</a></li>
             {% if model.pageIndex < model.pageCount %}
-                <li class="pagination-next"><a href="http://localhost:9000/viewProjects?{{ model.searchUriParams }}&page={{ model.pageIndex + 1}}"
-                                               aria-label="Предыдущая страница">Вперед</a></li>
+                <li class="pagination-next"><a
+                        href="http://localhost:9000/viewProjects?{{ model.searchUriParams }}&page={{ model.pageIndex + 1}}"
+                        aria-label="Предыдущая страница">Вперед</a></li>
             {% endif %}
         </ul>
     </nav>
-    <form method="GET">
-        <div class="grid-container full">
-            <div class="grid-x grid-margin-x small-up-3 medium-up-5">
-                <div class="cell small-3">
-                </div>
-                <div class="cell small-3">
-                </div>
-                <div class="cell small-3">
-                    <label>
-                        <input type="number" name="page" placeholder="Всего страниц {{ model.pageCount }}">
-                    </label>
-                </div>
-                <div class="cell small-3">
-                    <button class="button">Перейти</button>
-                </div>
-            </div>
-        </div>
-    </form>
     {% endblock %}

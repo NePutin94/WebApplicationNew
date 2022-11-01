@@ -9,7 +9,7 @@
         <div class="grid-container">
             <div class="grid-y grid-padding-x">
                 <div class="medium-6 cell">
-                    <input type="text" placeholder="Проект" name="project" value="{{model.form.fields["name"] | first}}">
+                    <input type="text" placeholder="Проект" name="project" value="{{model.form.fields["project"] | first}}">
                 </div>
                 <div class="medium-6 cell">
                     <input type="text" placeholder="Ваше имя" name="name" value="{{model.form.fields["name"] | first}}">

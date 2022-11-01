@@ -3,6 +3,7 @@
 
     <div class="grid-container full">
         <div class="grid-y ">
+            <div class="cell"><a href="{{ model.backUri }}" class="button">Назад</a></div>
             <div class="cell">
                 <h2><a
                         href="/viewProjects/{{ model.investment.project.id }}?backUri=/viewInvestment/{{ model.investment.id }}">
@@ -20,7 +21,7 @@
             <div class="cell">
                 <div class="callout secondary">
                     <h5>Дата инвестиции</h5>
-                    <p>{{ model.investment.creationDate  | date("yyyy-MM-dd")}}</p>
+                    <p>{{ model.investment.creationDate | date("yyyy-MM-dd")}}</p>
                 </div>
             </div>
             <div class="cell">

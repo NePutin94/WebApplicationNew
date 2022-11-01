@@ -6,9 +6,9 @@ import org.http4k.lens.*
 class InvestmentFilter {
     companion object {
         val projectField = FormField.nonEmptyString().required("project")
-        val nameField = FormField.nonEmptyString().required("name")
+        val nameField = FormField.string().optional("name")
         val amountField = FormField.int().required("amount")
-        val feedbackField = FormField.string().required("feedback")
+        val feedbackField = FormField.string().optional("feedback")
         val investLens = Body.webForm(
             Validator.Feedback,
             projectField,

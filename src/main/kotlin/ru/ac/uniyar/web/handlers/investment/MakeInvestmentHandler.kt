@@ -25,24 +25,28 @@ fun makeInvestmentFormHandler(
 ): HttpHandler = { request ->
     val validForm = InvestmentFilter.investLens(request)
     if (validForm.errors.isEmpty()) {
-        val _name = InvestmentFilter.nameField(validForm).trim()
-        val _projectName = InvestmentFilter.projectField(validForm).trim()
-        val _feedback = InvestmentFilter.feedbackField(validForm)
-        val _amount = InvestmentFilter.amountField(validForm)
+        val fname = InvestmentFilter.nameField(validForm)?.trim()
+        val fprojectName = InvestmentFilter.projectField(validForm).trim()
+        val ffeedback = InvestmentFilter.feedbackField(validForm)
+        val famount = InvestmentFilter.amountField(validForm)
 
-        val try_find = fetchProjectOperation.fetchByName(_projectName)
-        if (try_find != null) {
-            addProjectInvestOperation.add(Investment {
+        val try_find = fetchProjectOperation.fetchByName(fprojectName)
+
+        if (try_find == null) {
+            val viewModel = AddInvestmentVM("Такого проекта не существует!", validForm)
+            Response(Status.OK).with(htmlView of viewModel)
+        } else if (try_find.endDate <= LocalDateTime.now()) {
+            val viewModel = AddInvestmentVM("Проект уже закрыт!", validForm)
+            Response(Status.OK).with(htmlView of viewModel)
+        } else {
+            val id = addProjectInvestOperation.add(Investment {
                 project = try_find
-                invName = _name
-                feedback = _feedback
-                amount = _amount
+                invName = fname
+                feedback = ffeedback
+                amount = famount
                 creationDate = LocalDateTime.now()
             })
-            Response(Status.FOUND).header("Location", "/viewProjects")
-        } else {
-            val viewModel = AddInvestmentVM("Такого проекта не существует",validForm)
-            Response(Status.OK).with(htmlView of viewModel)
+            Response(Status.FOUND).header("Location", "/viewInvestment/${id}")
         }
     } else {
         val viewModel = AddInvestmentVM("", validForm)
