@@ -1,0 +1,20 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+    <form method="POST">
+        {% if model.form.errors is not empty %}
+            {% for err in model.form.errors %}
+                <p>{{err}}</p>
+            {% endfor %}
+        {% endif %}
+        <div class="grid-container">
+            <div class="grid-y grid-padding-x">
+                <div class="medium-6 cell">
+                    <input type="text" placeholder="Имя" name="name" value="{{model.form.fields["name"] | first}}">
+                </div>
+                <div class="medium-6 cell">
+                    <button class="button">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endblock %}

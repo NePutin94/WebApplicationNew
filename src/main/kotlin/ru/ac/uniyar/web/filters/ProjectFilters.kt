@@ -6,7 +6,6 @@ import org.http4k.lens.*
 class ProjectFilters {
     companion object {
         val nameField = FormField.nonEmptyString().required("name")
-        val businessmanField = FormField.nonEmptyString().required("businessman")
         val descField = FormField.nonEmptyString().required("description")
         val fundSizeField = FormField.int().required("fundSize")
         val startDateField = FormField.dateTime().required("startDate")
@@ -14,7 +13,6 @@ class ProjectFilters {
         val projectLens = Body.webForm(
             Validator.Feedback,
             nameField,
-            businessmanField,
             descField,
             fundSizeField,
             startDateField,

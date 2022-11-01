@@ -29,7 +29,13 @@
                     <li><a href="/makeInvestment">Инвестировать в проект</a></li>
                 </ul>
             </li>
-            <li><a href="/viewBusinessman">Предприниматели</a></li>
+            <li>
+                <a href="#">Предприниматели</a>
+                <ul class="menu vertical">
+                    <li><a href="/viewBusinessman">Просмотр</a></li>
+                    <li><a href="/addBusinessman">Добавить</a></li>
+                </ul>
+            </li>
             <li><a href="/help">Описание</a></li>
         </ul>
     </div>

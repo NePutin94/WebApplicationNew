@@ -1,0 +1,123 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <div class="grid-y">
+                    <div class="cell">
+                        <div class="cell"><a href="{{ model.backUri }}" class="button">Назад</a></div>
+                        <h2> {{ model.project.name }}
+                            {% if model.IsClosed %}
+                                [Закрыт]
+                            {% endif %}</h2>
+                    </div>
+                    {% if model.IsClosed %}
+                        {% if model.AmountCollected >= model.project.fundSize %}
+                            <div class="cell">
+                <span class="label success">Проект успешен, собрано {{ model.AmountCollected }}
+                    из {{ model.project.fundSize }}</span>
+                            </div>
+                            {% else %}
+                            <div class="cell">
+                <span class="label alert">Проект провален, собрано {{ model.AmountCollected }}
+                    из {{ model.project.fundSize }}</span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="cell">
+                        <span class="label primary">{{ model.project.creationDate | date("yyyy-MM-dd") }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cell">
+                <hr class="rounded">
+            </div>
+            <ul class="tabs" data-tabs id="example-tabs">
+                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Проект</a></li>
+                <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Инвестиции</a></li>
+                {% if not model.IsClosed %}
+                    <li class="tabs-title"><a data-tabs-target="panel3" href="#panel3">Статистика</a></li>
+                {% endif %}
+            </ul>
+
+            <div class="tabs-content" data-tabs-content="example-tabs">
+                <div class="tabs-panel is-active" id="panel1">
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Предприниматель</h5>
+                            <p>
+                                <a href="/viewBusinessman/{{ model.project.businessman.id }}?backUri=viewProject/{{ model.project.id }}">{{ model.project.businessman.name }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Описание</h5>
+                            <p>{{ model.project.description}}</p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Период сбора средств</h5>
+                            <p>{{ model.project.startDate | date("yyyy-MM-dd") }}
+                                - {{ model.project.endDate | date("yyyy-MM-dd") }}</p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Размер фонда</h5>
+                            <p>{{ model.project.fundSize }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabs-panel" id="panel2">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th width="180">Имя инвестора</th>
+                            <th width="200">Дата инвестиции</th>
+                            <th width="150">Сумма инвестиции</th>
+                            <th width="200">Контакты</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                {% for investment in model.investmentList %}
+                            <tr>
+                                <td>{{ investment.invName }}</td>
+                                <td>{{ investment.creationDate | date("yyyy-MM-dd', 'HH:mm") }}</td>
+                                <td>{{ investment.amount }}</td>
+                                <td>{{ investment.feedback }}</td>
+                                <td><a href="/viewInvestment/{{ investment.id }}"> Подробно </a></td>
+                            </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if not model.IsClosed %}
+                    <div class="tabs-panel" id="panel3">
+                        <div class="callout secondary">
+                            <h5>Средств собрано</h5>
+                            <p>{{ model.AmountCollected }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Времени осталось</h5>
+                            <p>{{ model.RemainingTime }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Количество инвестиций</h5>
+                            <p>{{ model.NumberInvestments }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Прогноз успешности</h5>
+                            <p>{{ model.SuccessForecast }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Средняя сумма инвестиций в день</h5>
+                            <p>{{ model.AmountPerDat }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}

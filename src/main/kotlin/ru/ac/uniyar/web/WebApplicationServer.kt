@@ -12,20 +12,10 @@ import org.http4k.server.asServer
 import org.http4k.template.PebbleTemplates
 import org.http4k.template.ViewModel
 import org.http4k.template.viewModel
-import org.ktorm.dsl.from
-import org.ktorm.dsl.joinReferencesAndSelect
-import org.ktorm.dsl.mapNotNull
-import org.ktorm.dsl.select
-import ru.ac.uniyar.Businessman
-import ru.ac.uniyar.Project
-import ru.ac.uniyar.ProjectInvestment
 import ru.ac.uniyar.domain.database.*
 import ru.ac.uniyar.domain.operations.OperationHolder
 import ru.ac.uniyar.web.models.ErrorMessageVM
-import ru.ac.uniyar.web.handlers.Api
 import ru.ac.uniyar.web.handlers.Web
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 val errFilter: (BiDiBodyLens<ViewModel>) -> Filter = { htmlView ->
     Filter { next: HttpHandler ->
@@ -44,7 +34,6 @@ val appRoutes: (operationHolder: OperationHolder, BiDiBodyLens<ViewModel>) -> Ro
     { operationHolder, htmlView ->
         routes(
             Web(operationHolder, htmlView),
-            Api(operationHolder, htmlView),
             static(ResourceLoader.Classpath("public"))
         )
     }

@@ -1,0 +1,101 @@
+    {% extends "../MainVM.peb" %}
+    {% block content %}
+    <form method="GET">
+        <div class="grid-x">
+            <div class="cell small-8">
+                <div class="grid-y">
+                    <div class="cell">
+                        <div class="grid-x grid-margin-x">
+                            <div class="cell small-3">
+                                <input type="date" placeholder="Дата начала" name="startDateL"
+                                       value="{{model.investmentFilterParams.startDateL }}">
+                            </div>
+                            --
+                            <div class="cell small-3">
+                                <input type="date" placeholder="Дата начала" name="startDateR"
+                                       value="{{model.investmentFilterParams.startDateR }}">
+                            </div>
+                            <div class="cell small-3">
+                                Дата начала
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cell small-5">
+            </div>
+            <div class="cell small-6">
+                <button class="button">Поиск</button>
+            </div>
+        </div>
+    </form>
+    <div class="cell">
+        <hr class="rounded">
+    </div>
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="150">Имя инвестора</th>
+                        <th width="150">Проект</th>
+                        <th width="150">Дата инвестиции</th>
+                        <th width="150">Сумма инвестиции</th>
+                        <th width="150">Контакты</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {% for investment in model.investments %}
+                        <tr>
+                            <td>{{ investment.invName }}</td>
+                            <td>
+                                <a href="/viewProjects/{{ investment.project.id }}?backUri={{ model.uri4BackUri }}">{{ investment.project.name }}</a>
+                            </td>
+                            <td>{{ investment.creationDate }}</td>
+                            <td>{{ investment.amount }}</td>
+                            <td>{{ investment.feedback }}</td>
+                        </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="cell">
+        <hr class="rounded">
+    </div>
+    <nav aria-label="Pagination">
+        <ul class="pagination text-center">
+            {% if model.pageIndex > 1 %}
+                <li class="pagination-previous"><a
+                        href="http://localhost:9000/viewInvestment?{{ model.searchUriParams }}&page={{ model.pageIndex - 1}}"
+                        aria-label="Следующая страница">Назад</a></li>
+            {% endif %}
+            <li><a href="#" class="disabled" aria-label="Страница  {{ model.pageIndex}}">{{ model.pageIndex}}</a></li>
+            {% if model.pageIndex < model.pageCount %}
+                <li class="pagination-next"><a
+                        href="http://localhost:9000/viewInvestment?{{ model.searchUriParams }}&page={{ model.pageIndex + 1}}"
+                        aria-label="Предыдущая страница">Вперед</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <form method="GET">
+        <div class="grid-container full">
+            <div class="grid-x grid-margin-x small-up-3 medium-up-5">
+                <div class="cell small-3">
+                </div>
+                <div class="cell small-3">
+                </div>
+                <div class="cell small-3">
+                    <label>
+                        <input type="number" name="page" placeholder="Всего страниц {{ model.pageCount }}">
+                    </label>
+                </div>
+                <div class="cell small-3">
+                    <button class="button">Перейти</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endblock %}

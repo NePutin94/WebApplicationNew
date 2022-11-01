@@ -6,6 +6,7 @@ import org.ktorm.dsl.*
 import org.ktorm.schema.ColumnDeclaring
 import ru.ac.uniyar.Project
 import ru.ac.uniyar.domain.database.ProjectTable
+import java.math.RoundingMode
 
 class ProjectListOperation(
     private val database: Database,
@@ -23,7 +24,7 @@ class ProjectListOperation(
             .from(ProjectTable)
             .joinReferencesAndSelect()
             .where(filter)
-            .orderBy(ProjectTable.enddate.desc())
+            .orderBy(ProjectTable.enddate.asc())
             .limit(pageIndex * pageSize, pageSize)
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
@@ -33,6 +34,12 @@ class ProjectListOperation(
             .joinReferencesAndSelect()
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
+    fun listProjectNames(): List<String> =
+        database
+            .from(ProjectTable)
+            .select(ProjectTable.name)
+            .mapNotNull { row -> row[ProjectTable.name]!! }
+
     fun listByBusinessmanId(businessmanId: Int): List<Project> =
         database.from(ProjectTable).select().where { ProjectTable.businessman eq businessmanId }
             .mapNotNull { row -> ProjectTable.createEntity(row) }
@@ -40,9 +47,13 @@ class ProjectListOperation(
     fun getTotalCount(filter: () -> ColumnDeclaring<Boolean>) = database
         .from(ProjectTable)
         .joinReferencesAndSelect()
+        .where(filter)
         .totalRecords
 
-    fun getPagesCount(filter: () -> ColumnDeclaring<Boolean>) = getTotalCount(filter) / pageSize
+    fun getPagesCount(filter: () -> ColumnDeclaring<Boolean>): Int {
+        val res = getTotalCount(filter).toDouble() / pageSize.toDouble()
+        return res.toBigDecimal().setScale(0, RoundingMode.CEILING).toInt()
+    }
 }
 
 

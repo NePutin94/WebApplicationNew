@@ -3,8 +3,7 @@ package ru.ac.uniyar.domain.database
 import org.ktorm.schema.*
 import ru.ac.uniyar.Businessman
 import ru.ac.uniyar.Project
-import ru.ac.uniyar.ProjectInvestment
-import ru.ac.uniyar.domain.database.ProjectTable.references
+import ru.ac.uniyar.Investment
 
 object ProjectTable : Table<Project>("PROJECTS") {
     val id = int("ID").primaryKey().bindTo { it.id }
@@ -23,7 +22,7 @@ object BusinessmanTable : Table<Businessman>("BUSINESSMANS") {
     val creationdate = datetime("CREATIONDATE").bindTo { it.creationDate }
 }
 
-object ProjectInvestmentTable : Table<ProjectInvestment>("PROJECTINVESTMENTS") {
+object InvestmentTable : Table<Investment>("PROJECTINVESTMENTS") {
     val id = int("ID").primaryKey().bindTo { it.id }
     val invName = varchar("NAME").bindTo { it.invName }
     val creationdate = datetime("CREATIONDATE").bindTo { it.creationDate }
@@ -32,12 +31,10 @@ object ProjectInvestmentTable : Table<ProjectInvestment>("PROJECTINVESTMENTS") {
     val amount = int("AMOUNT").bindTo { it.amount }
 }
 
-object EmployeeTable : Table<Nothing>("EMPLOYEE") {
+data class Test(val id: Int, val name: String?, val amount: Int)
+
+object TestTable : Table<Nothing>("TEST") {
     val id = int("ID").primaryKey()
     val name = varchar("NAME")
-    val job = varchar("JOB")
-    val managerId = int("MANAGER_ID")
-    val hireDate = date("HIRE_DATE")
-    val salary = long("SALARY")
-    val departmentId = int("DEPARTMENT_ID")
+    val amount = int("AMOUNT")
 }

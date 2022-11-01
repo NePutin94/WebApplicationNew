@@ -1,0 +1,88 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <div class="grid-y">
+                    <div class="cell">
+                        <div class="cell"><a href="{{ model.backUri }}" class="button">Назад</a></div>
+                        <h2> {{ model.businessman.name }}</h2>
+                    </div>
+                    <div class="cell">
+                        <span class="label primary">{{ model.businessman.creationDate | date("yyyy-MM-dd") }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="cell">
+                <hr class="rounded">
+                <h3>Список проектов: </h3>
+            </div>
+            <div class="cell">
+                <div class="grid-container full">
+                    <div class="grid-y ">
+                        {% for project in model.businessmanProjectList %}
+                            {% if not model.projectClosed[project.name]%}
+                                <div class="cell">
+                                    <div class="callout">
+                                        <h5>
+                                            <a href="/viewProjects/{{ project.id }}?backUri=/viewBusinessman/{{ model.businessman.id }}">{{ project.name }}</a>
+                                        </h5>
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th width="150">Размер фонда</th>
+                                                <th width="150">Дата создания</th>
+                                                <th width="150">Дата закрытия</th>
+                                                <th width="150">Сумма инвестиций</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ project.fundSize }}</td>
+                                                <td>{{ project.creationDate | date("yyyy-MM-dd")}}</td>
+                                                <td>{{ project.endDate | date("yyyy-MM-dd")}}</td>
+                                                <td>{{ model.projectsInvestSum[project.name] }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {% else %}
+                            <div class="cell">
+                                {% if model.successProjects[project.name]%}
+                                <div class="callout success">
+                                {% else %}
+                                <div class="callout alert ">
+                                {% endif %}
+                                <h5>
+                                    <a href="/viewProjects/{{ project.id }}?backUri=/viewBusinessman/{{ model.businessman.id }}">{{ project.name }}</a>
+                                </h5>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th width="150">Размер фонда</th>
+                                        <th width="150">Дата создания</th>
+                                        <th width="150">Дата закрытия</th>
+                                        <th width="150">Сумма инвестиций</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>{{ project.fundSize }}</td>
+                                        <td>{{ project.creationDate | date("yyyy-MM-dd")}}</td>
+                                        <td>{{ project.endDate | date("yyyy-MM-dd")}}</td>
+                                        <td>{{ model.projectsInvestSum[project.name] }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
