@@ -7,6 +7,32 @@
             <div class="cell small-6">
                 <div class="grid-y small-up-2">
                     <div class="cell">
+                        <div class="grid-x grid-margin-x">
+                            <div class="cell small-5">
+                                <button class="button" type="button"
+                                        data-toggle="example-dropdown2"
+                                        form="FormSelectName">{{model.projectFilterParams.selectedBName}}</button>
+                                <div class="dropdown-pane top" id="example-dropdown2" data-dropdown>
+                                    <div class="grid-y grid-margin-y">
+                                        {% for businessman in model.projectFilterParams.businessmanNames %}
+                                            <div class="cell">
+                                                <input type="submit" name="businessman" value="{{businessman}}"
+                                                       form="FormSelectName"/>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="cell">
+                                            <input type="submit" name="businessman" value="Select all"
+                                                   form="FormSelectName"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="cell small-6">
+                                Имя бизнесмена
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell">
                         <div class="grid-container full">
                             <div class="grid-x grid-margin-x">
                                 <div class="cell small-4">
@@ -23,24 +49,6 @@
                                 </div>
                                 <div class="cell small-7">
                                     Проект закрытый?
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cell">
-                        <button class="button" type="button"
-                                data-toggle="example-dropdown2"
-                                form="FormSelectName">{{model.projectFilterParams.selectedBName}}</button>
-                        <div class="dropdown-pane top" id="example-dropdown2" data-dropdown>
-                            <div class="grid-y grid-margin-y">
-                                {% for businessman in model.projectFilterParams.businessmanNames %}
-                                    <div class="cell">
-                                        <input type="submit" name="businessman" value="{{businessman}}"
-                                               form="FormSelectName"/>
-                                    </div>
-                                {% endfor %}
-                                <div class="cell">
-                                    <input type="submit" name="businessman" value="Select all" form="FormSelectName"/>
                                 </div>
                             </div>
                         </div>

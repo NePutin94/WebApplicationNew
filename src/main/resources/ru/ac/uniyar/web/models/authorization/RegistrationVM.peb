@@ -1,0 +1,28 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+    <form method="POST">
+        <div class="grid-container">
+            <div class="grid-y grid-padding-x">
+                <div class="medium-6 cell">
+                    <input type="text" placeholder="Имя" name="name" value="{{model.form.fields["name"] | first}}">
+                </div>
+                <div class="medium-6 cell">
+                    <input type="password" placeholder="Пароль" name="password"
+                           value="{{model.form.fields["password"] | first}}">
+                </div>
+                <div class="medium-6 cell">
+                    <input type="password" placeholder="Пароль" name="passwordCheck"
+                           value="{{model.form.fields["passwordCheck"] | first}}">
+                </div>
+                {% if model.form.fields["password"] != model.form.fields["passwordCheck"] %}
+                    <div class="medium-6 cell">
+                        Пароли не совпадают
+                    </div>
+                {% endif %}
+                <div class="medium-6 cell">
+                    <button class="button">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% endblock %}

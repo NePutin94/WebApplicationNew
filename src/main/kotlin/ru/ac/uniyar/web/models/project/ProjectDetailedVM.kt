@@ -1,8 +1,8 @@
 package ru.ac.uniyar.web.models.project
 
 import org.http4k.template.ViewModel
-import ru.ac.uniyar.Project
-import ru.ac.uniyar.Investment
+import ru.ac.uniyar.domain.entities.Project
+import ru.ac.uniyar.domain.entities.Investment
 
 data class ProjectDetailedVM(
     val project: Project,

@@ -3,7 +3,7 @@ package ru.ac.uniyar.domain.operations.queries
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.schema.ColumnDeclaring
-import ru.ac.uniyar.Investment
+import ru.ac.uniyar.domain.entities.Investment
 import ru.ac.uniyar.domain.database.InvestmentTable
 
 class InvestmentFetchOperation(

@@ -2,7 +2,7 @@ package ru.ac.uniyar.domain.operations.commands
 
 import org.ktorm.database.Database
 import org.ktorm.dsl.insertAndGenerateKey
-import ru.ac.uniyar.Investment
+import ru.ac.uniyar.domain.entities.Investment
 import ru.ac.uniyar.domain.database.InvestmentTable
 
 class InvestmentAddOperation(private val database: Database) {

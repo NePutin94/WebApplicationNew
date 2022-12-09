@@ -13,19 +13,21 @@ import org.http4k.template.ViewModel
 import org.ktorm.entity.toList
 import ru.ac.uniyar.domain.database.filters.makeProjectFilterExpr
 import ru.ac.uniyar.domain.operations.queries.*
+import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.filters.ProjectFilterParams
 import ru.ac.uniyar.web.filters.ProjectSearchFilter
 import ru.ac.uniyar.web.filters.lensOrNull
 import ru.ac.uniyar.web.models.project.ProjectDetailedVM
 import ru.ac.uniyar.web.models.project.ProjectListVM
+import java.sql.DriverManager
 import java.time.Duration
 import java.time.LocalDateTime
 
 fun detailedProjectViewHandler(
     projectFetchOperation: FetchProjectOperation,
     listInvestmentOperation: InvestmentListOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
@@ -55,13 +57,13 @@ fun detailedProjectViewHandler(
             amountPerDay,
             isClosed
         )
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }
 
 fun listProjectsViewHandler(
     projectListOperation: ProjectListOperation,
     businessmanListOperation: BusinessmanListOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val businessman = ProjectSearchFilter.businessmanField(request)
@@ -113,5 +115,5 @@ fun listProjectsViewHandler(
                 request.uri.toString().replace("?", "*").replace("&", "~") //encoding a uri for bakuri
             )
 
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }

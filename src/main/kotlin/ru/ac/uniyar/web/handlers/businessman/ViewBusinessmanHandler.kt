@@ -15,6 +15,7 @@ import ru.ac.uniyar.domain.operations.queries.BusinessmanListOperation
 import ru.ac.uniyar.domain.operations.queries.BusinessmanFetchOperation
 import ru.ac.uniyar.domain.operations.queries.InvestmentFetchOperation
 import ru.ac.uniyar.domain.operations.queries.ProjectListOperation
+import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.models.businessman.BusinessmanListVM
 import ru.ac.uniyar.web.models.businessman.BusinessmenDetailedVM
@@ -23,7 +24,7 @@ import java.time.LocalDateTime
 fun listBusinessmanViewHandler(
     businessmanListOperation: BusinessmanListOperation,
     projectListOperation: ProjectListOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val businessmans = businessmanListOperation.list()
@@ -34,14 +35,14 @@ fun listBusinessmanViewHandler(
             projectsCount[p.name] = projects.count()
         }
         val viewModel = BusinessmanListVM(businessmans, projectsCount)
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }
 
 fun detailedBusinessmanHandler(
     projectListOperation: ProjectListOperation,
     businessmanFetchOperation: BusinessmanFetchOperation,
     investmentFetchOperation: InvestmentFetchOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
@@ -60,5 +61,5 @@ fun detailedBusinessmanHandler(
             projectClosed[p.name] = p.endDate <= LocalDateTime.now()
         }
         val viewModel = BusinessmenDetailedVM(businessman, backUri ?: "/viewBusinessman", listOfProject, projectsSum, successProjects, projectClosed)
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }

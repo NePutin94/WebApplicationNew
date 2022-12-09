@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
-
 <div class="top-bar">
     <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
@@ -38,6 +37,20 @@
             </li>
             <li><a href="/help">Описание</a></li>
         </ul>
+    </div>
+    <div class="top-bar-right">
+            {% if context is empty %}
+            <ul class="dropdown menu" data-dropdown-menu>
+                <li>
+                    <a href="#">Авторизация</a>
+                    <ul class="menu vertical">
+                        <li><a href="/registration">Регистрация</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {% else %}
+            {{ context.message }}
+            {% endif %}
     </div>
 </div>
 

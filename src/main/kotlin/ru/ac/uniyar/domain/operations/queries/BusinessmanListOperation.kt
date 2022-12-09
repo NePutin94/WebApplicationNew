@@ -3,9 +3,8 @@ package ru.ac.uniyar.domain.operations.queries
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.ktorm.schema.ColumnDeclaring
-import ru.ac.uniyar.Businessman
+import ru.ac.uniyar.domain.entities.Businessman
 import ru.ac.uniyar.domain.database.BusinessmanTable
-import ru.ac.uniyar.domain.database.InvestmentTable
 
 class BusinessmanListOperation(
     private val database: Database,

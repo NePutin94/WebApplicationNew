@@ -1,4 +1,4 @@
-package ru.ac.uniyar
+package ru.ac.uniyar.domain.entities
 
 import org.ktorm.entity.Entity
 import java.time.LocalDateTime

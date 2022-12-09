@@ -1,10 +1,8 @@
 package ru.ac.uniyar.domain.operations.commands
 
 import org.ktorm.database.Database
-import org.ktorm.dsl.insert
 import org.ktorm.dsl.insertAndGenerateKey
-import org.ktorm.support.mysql.insertOrUpdate
-import ru.ac.uniyar.Project
+import ru.ac.uniyar.domain.entities.Project
 import ru.ac.uniyar.domain.database.ProjectTable
 
 class ProjectAddOperation(private val database: Database) {

@@ -1,8 +1,8 @@
 package ru.ac.uniyar.domain.database
 
-import ru.ac.uniyar.Businessman
-import ru.ac.uniyar.Project
-import ru.ac.uniyar.Investment
+import ru.ac.uniyar.domain.entities.Businessman
+import ru.ac.uniyar.domain.entities.Project
+import ru.ac.uniyar.domain.entities.Investment
 import ru.ac.uniyar.domain.operations.OperationHolder
 import java.time.LocalDateTime
 

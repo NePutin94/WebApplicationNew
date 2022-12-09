@@ -7,11 +7,12 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.ViewModel
 import ru.ac.uniyar.domain.operations.OperationHolder
+import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.handlers.businessman.makeInvestmentFormHandler
 import ru.ac.uniyar.web.handlers.businessman.makeInvestmentHandler
 
 
-val InvestmentRoutes: (operationHolder: OperationHolder, BiDiBodyLens<ViewModel>) -> RoutingHttpHandler =
+val InvestmentRoutes: (operationHolder: OperationHolder, ContextAwareViewRender) -> RoutingHttpHandler =
     { operationHolder, htmlView ->
         routes(
             "/makeInvestment" bind Method.GET to makeInvestmentHandler(htmlView),

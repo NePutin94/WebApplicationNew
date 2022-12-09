@@ -1,11 +1,9 @@
 package ru.ac.uniyar.domain.operations.queries
 
 import org.ktorm.database.Database
-import org.ktorm.database.asIterable
 import org.ktorm.dsl.*
-import org.ktorm.entity.*
 import org.ktorm.schema.ColumnDeclaring
-import ru.ac.uniyar.Project
+import ru.ac.uniyar.domain.entities.Project
 import ru.ac.uniyar.domain.database.ProjectTable
 import java.math.RoundingMode
 

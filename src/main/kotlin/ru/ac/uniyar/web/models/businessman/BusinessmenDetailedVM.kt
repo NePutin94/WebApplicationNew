@@ -1,8 +1,8 @@
 package ru.ac.uniyar.web.models.businessman
 
 import org.http4k.template.ViewModel
-import ru.ac.uniyar.Businessman
-import ru.ac.uniyar.Project
+import ru.ac.uniyar.domain.entities.Businessman
+import ru.ac.uniyar.domain.entities.Project
 
 data class BusinessmenDetailedVM(
     val businessman: Businessman,

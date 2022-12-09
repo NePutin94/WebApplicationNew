@@ -7,9 +7,10 @@ import org.http4k.routing.bind
 import org.http4k.routing.routes
 import org.http4k.template.ViewModel
 import ru.ac.uniyar.domain.operations.OperationHolder
+import ru.ac.uniyar.util.ContextAwareViewRender
 
 
-val ProjectRoutes: (operationHolder: OperationHolder, BiDiBodyLens<ViewModel>) -> RoutingHttpHandler =
+val ProjectRoutes: (operationHolder: OperationHolder, ContextAwareViewRender) -> RoutingHttpHandler =
     { operationHolder, htmlView ->
         routes(
             "/viewProjects" bind Method.GET to listProjectsViewHandler(

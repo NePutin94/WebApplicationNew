@@ -1,9 +1,10 @@
 package ru.ac.uniyar.domain.database
 
 import org.ktorm.schema.*
-import ru.ac.uniyar.Businessman
-import ru.ac.uniyar.Project
-import ru.ac.uniyar.Investment
+import ru.ac.uniyar.domain.entities.Businessman
+import ru.ac.uniyar.domain.entities.Project
+import ru.ac.uniyar.domain.entities.Investment
+import ru.ac.uniyar.domain.entities.User
 
 object ProjectTable : Table<Project>("PROJECTS") {
     val id = int("ID").primaryKey().bindTo { it.id }
@@ -29,4 +30,12 @@ object InvestmentTable : Table<Investment>("PROJECTINVESTMENTS") {
     val project = int("PROJECT_ID").references(ProjectTable) { it.project }
     val feedback = varchar("FEEDBACK").bindTo { it.feedback }
     val amount = int("AMOUNT").bindTo { it.amount }
+}
+
+object UsersTable : Table<User>("USERS") {
+    val id = int("ID").primaryKey().bindTo { it.id }
+    val creationdate = datetime("CREATIONDATE").bindTo { it.creationDate }
+    val name = varchar("NAME").bindTo { it.name }
+    val password = varchar("PASSWORD").bindTo { it.password }
+    val type = int("TYPE").bindTo { it.type }
 }

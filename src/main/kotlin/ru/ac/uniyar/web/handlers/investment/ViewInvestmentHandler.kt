@@ -12,25 +12,26 @@ import org.http4k.template.ViewModel
 import ru.ac.uniyar.domain.database.filters.makeInvestmentFilterExpr
 import ru.ac.uniyar.domain.operations.queries.InvestmentFetchOperation
 import ru.ac.uniyar.domain.operations.queries.InvestmentListOperation
+import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.*
 import ru.ac.uniyar.web.models.investment.InvestmentDetailedVM
 import ru.ac.uniyar.web.models.investment.InvestmentViewVM
 
 fun detailedInvestmentViewHandler(
     investmentFetchOperation: InvestmentFetchOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val investId = request.path("id")!!.toInt()
-        val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
+        val backUri = BasicFilters.backUriField(request)?.replace("*", "?")?.replace("~", "&")
         val investment = investmentFetchOperation.fetch(investId)!!
         val viewModel = InvestmentDetailedVM(investment, backUri ?: "/viewInvestment")
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }
 
 fun listInvestmentViewHandler(
     investmentListOperation: InvestmentListOperation,
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
 
@@ -53,5 +54,5 @@ fun listInvestmentViewHandler(
                 request.uri.query.replace("&page=\\d+".toRegex(), ""),
                 request.uri.toString().replace("?", "*").replace("&", "~")
             )
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }

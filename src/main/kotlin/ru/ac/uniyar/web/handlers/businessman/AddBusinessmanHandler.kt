@@ -6,21 +6,22 @@ import org.http4k.core.Status
 import org.http4k.core.with
 import org.http4k.lens.BiDiBodyLens
 import org.http4k.template.ViewModel
-import ru.ac.uniyar.Businessman
+import ru.ac.uniyar.domain.entities.Businessman
 import ru.ac.uniyar.domain.operations.commands.BusinessmanAddOperation
+import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.BusinessmanFilters
 import ru.ac.uniyar.web.models.businessman.BusinessmanAddVM
 import java.time.LocalDateTime
 
 fun addBusinessmanViewHandler(
-    htmlView: BiDiBodyLens<ViewModel>
+    htmlView: ContextAwareViewRender
 ): HttpHandler = { request ->
     val viewModel = BusinessmanAddVM()
-    Response(Status.OK).with(htmlView of viewModel)
+    Response(Status.OK).with(htmlView(request) of viewModel)
 }
 
 fun addBusinessmanFormHandler(
-    htmlView: BiDiBodyLens<ViewModel>,
+    htmlView: ContextAwareViewRender,
     businessmanAddOperation: BusinessmanAddOperation
 ): HttpHandler = { request ->
     val validForm = BusinessmanFilters.businessmanLens(request)
@@ -33,6 +34,6 @@ fun addBusinessmanFormHandler(
         Response(Status.FOUND).header("Location", "/viewBusinessman/${id}")
     } else {
         val viewModel = BusinessmanAddVM(validForm)
-        Response(Status.OK).with(htmlView of viewModel)
+        Response(Status.OK).with(htmlView(request) of viewModel)
     }
 }
