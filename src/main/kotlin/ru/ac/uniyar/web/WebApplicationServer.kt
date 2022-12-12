@@ -3,7 +3,10 @@ package ru.ac.uniyar.web
 import org.http4k.cloudnative.env.Environment
 import org.http4k.core.*
 import org.http4k.core.ContentType.Companion.TEXT_HTML
+import org.http4k.core.cookie.Cookie
+import org.http4k.core.cookie.cookie
 import org.http4k.core.cookie.cookies
+import org.http4k.core.cookie.removeCookie
 import org.http4k.filter.ServerFilters
 import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.RequestContextKey
@@ -20,12 +23,19 @@ import org.http4k.template.viewModel
 import ru.ac.uniyar.AppConfig.Companion.webPortLens
 import ru.ac.uniyar.domain.authorization.JwtTools
 import ru.ac.uniyar.domain.database.*
+import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.entities.User
 import ru.ac.uniyar.domain.operations.OperationHolder
 import ru.ac.uniyar.domain.operations.queries.UserFetchOperation
 import ru.ac.uniyar.util.ContextAwarePebbleTemplates
 import ru.ac.uniyar.util.ContextAwareViewRender
+import ru.ac.uniyar.web.context.UsetState
 import ru.ac.uniyar.web.models.ErrorMessageVM
 import ru.ac.uniyar.web.handlers.Web
+import ru.ac.uniyar.web.models.businessman.BusinessmanAddVM
+import ru.ac.uniyar.web.permission.*
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 val errFilter: (ContextAwareViewRender) -> Filter = { htmlView ->
     Filter { next: HttpHandler ->
@@ -33,17 +43,19 @@ val errFilter: (ContextAwareViewRender) -> Filter = { htmlView ->
             val response = next(request)
             if (response.status.successful) {
                 response
+            } else if (response.status.code == Status.FORBIDDEN.code) {
+                response.with(htmlView(request) of ErrorMessageVM("Доступ запрещен", request.uri.toString()))
             } else {
-                response.with(htmlView(request) of ErrorMessageVM(request.uri.toString()))
+                response.with(htmlView(request) of ErrorMessageVM("Ошибка", request.uri.toString()))
             }
         }
     }
 }
 
-val appRoutes: (operationHolder: OperationHolder, ContextAwareViewRender, Environment, JwtTools, RequestContextLens<UsetState?>) -> RoutingHttpHandler =
-    { operationHolder, htmlView, appEnv, jwt, contextLens ->
+val appRoutes: (operationHolder: OperationHolder, ContextAwareViewRender, Environment, JwtTools, RequestContextLens<UsetState?>, premLens: RequestContextLens<Permissions>) -> RoutingHttpHandler =
+    { operationHolder, htmlView, appEnv, jwt, contextLens, permissions ->
         routes(
-            Web(operationHolder, htmlView, appEnv, jwt, contextLens),
+            Web(operationHolder, htmlView, appEnv, jwt, contextLens, permissions),
             static(ResourceLoader.Classpath("public"))
         )
     }
@@ -53,7 +65,7 @@ fun startDbServer(): H2DatabaseManager {
     println("Веб-интерфейс базы данных доступен по адресу http://localhost:${H2DatabaseManager.WEB_PORT}")
     println("Введите любую строку, чтобы завершить работу приложения")
     //if filling is used, it is better to clear the database first
-    //databaseManager.dropAll()
+    databaseManager.dropAll()
     performMigrations()
     return databaseManager
 }
@@ -68,14 +80,50 @@ fun addStateFilter(
         { request ->
             val f = request.cookies().find { cookie -> cookie.name == "auth_token" }
             if (f != null) {
-                val value = jwt.check(f.value)
-                val user_id = value?.subject
-                val user = userFetch.fetch(user_id!!.toInt())!!
-                next(
-                    request.with(contextLens of UsetState(user.name, user.id.toString()))
-                )
+                if (f.value.isEmpty()) //error remove cookie
+                {
+                    val date = LocalDateTime.of(1970, 1, 1, 0, 0)
+                    next(
+                        request.with(premLens of Guest).cookie(
+                            Cookie(
+                                "auth_token", "", -1, date.atZone(
+                                    ZoneId.systemDefault()
+                                ).toInstant()
+                            )
+                        )
+                    )
+                } else {
+                    try {
+                        val value = jwt.check(f.value)
+                        val userId = value?.subject
+                        val currContext = contextLens(request)
+                        val user: User =
+                            if (currContext == null || currContext.user.id != userId!!.toInt()) {
+                                userFetch.fetch(userId!!.toInt())!!
+                            } else
+                                currContext.user
+                        val perm = setPerm(TypesEnum.fromInt(user.type.id))
+                        next(
+                            request.with(contextLens of UsetState(user.name, user.id.toString(), user))
+                                .with(premLens of perm)
+                        )
+                    } catch (ex: Exception) //token has expired or token is invalid -> delete the cookie from the browser
+                    {
+                        val date = LocalDateTime.of(1970, 1, 1, 0, 0)
+                        next(
+                            request.with(premLens of Guest)
+                                .cookie(
+                                    Cookie(
+                                        "auth_token", "", -1, date.atZone(
+                                            ZoneId.systemDefault()
+                                        ).toInstant()
+                                    )
+                                )
+                        )
+                    }
+                }
             } else {
-                next(request.with(premLens of Permissions()))
+                next(request.with(premLens of Guest))
             }
         }
     }
@@ -94,26 +142,11 @@ fun startWebServer(operationHolder: OperationHolder, appEnv: Environment, jwt: J
     val server = ServerFilters.InitialiseRequestContext(contexts)
         .then(addStateFilter(permLens, contextLens, jwt, operationHolder.userFetch))
         .then(errFilter(htmlViewWithContext))
-        .then(appRoutes(operationHolder, htmlViewWithContext, appEnv, jwt, contextLens))
-        .asServer(Undertow(9000)).start()
+        .then(appRoutes(operationHolder, htmlViewWithContext, appEnv, jwt, contextLens, permLens))
+        .asServer(Undertow(appEnv["web.port"]!!.toInt())).start()
     println("Server started on http://localhost:" + server.port())
 }
 
-data class UsetState(val name: String, val id: String) : ViewModel
-
-val AuthorizedUserPerm = Permissions(true, true, true)
-val BusinessmanPerm = Permissions(true, true, true, true, true, true, true, true)
-
-data class Permissions(
-    val canAddInvestment: Boolean = false,
-    val canViewUserPage: Boolean = false,
-    val canCreateProject: Boolean = false,
-    val canViewUserProjects: Boolean = false,
-    val canEditProject: Boolean = false,
-    val canCloseProject: Boolean = false,
-    val canDeleteProject: Boolean = false,
-    val canViewInvestmentsOfProject: Boolean = false,
-)
 
 fun startApplication() {
 
@@ -128,10 +161,10 @@ fun startApplication() {
     val opHolder = OperationHolder(db)
 
     //filling the database
-    //fill(opHolder)
+    fill(opHolder, appEnv)
 
     startWebServer(opHolder, appEnv, jwtGen)
 
     readlnOrNull()
-    //  databaseManager.stopServers()
+    databaseManager.stopServers()
 }

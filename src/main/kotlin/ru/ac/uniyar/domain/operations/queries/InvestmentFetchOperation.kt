@@ -13,9 +13,9 @@ class InvestmentFetchOperation(
         database.from(InvestmentTable).joinReferencesAndSelect().where { InvestmentTable.id eq projectId }
             .mapNotNull { row -> InvestmentTable.createEntity(row) }.firstOrNull()
 
-    fun fetchByName(name: String): List<Investment> =
-        database.from(InvestmentTable).joinReferencesAndSelect().where { InvestmentTable.invName eq name }
-            .mapNotNull { row -> InvestmentTable.createEntity(row) }
+//    fun fetchByName(name: String): List<Investment> =
+//        database.from(InvestmentTable).joinReferencesAndSelect().where { InvestmentTable.user eq name }
+//            .mapNotNull { row -> InvestmentTable.createEntity(row) }
 
     fun fetchFiltered(filter: () -> ColumnDeclaring<Boolean>): List<Investment> =
         database

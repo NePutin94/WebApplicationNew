@@ -1,5 +1,5 @@
     {% extends "./PageVM.peb" %}
     {% block content %}
-    <h1>Ошибка</h1>
-    <p>Невозможно найти страницу по пути <kbd>{{model.requestUri}}</kbd></p>
+    <h1>{{ model.message }}</h1>
+    <p>По пути <kbd>{{model.requestUri}}</kbd></p>
     {% endblock %}

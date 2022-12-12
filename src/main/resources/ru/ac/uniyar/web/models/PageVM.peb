@@ -32,7 +32,7 @@
                 <a href="#">Предприниматели</a>
                 <ul class="menu vertical">
                     <li><a href="/viewBusinessman">Просмотр</a></li>
-                    <li><a href="/addBusinessman">Добавить</a></li>
+{#                    <li><a href="/addBusinessman">Добавить</a></li>#}
                 </ul>
             </li>
             <li><a href="/help">Описание</a></li>
@@ -44,12 +44,25 @@
                 <li>
                     <a href="#">Авторизация</a>
                     <ul class="menu vertical">
+                        <li><a href="/login">Вход</a></li>
                         <li><a href="/registration">Регистрация</a></li>
                     </ul>
                 </li>
             </ul>
             {% else %}
-            {{ context.message }}
+            <div class="grid-x" >
+                <div class="cell small-6">
+                    <ul class="dropdown menu" data-dropdown-menu>
+                        <li>
+                            <a href="#"><img src="/images/logo.png" style="width: 32px;height: 32px;">{{ context.name }}</a>
+                            <ul class="menu vertical">
+                                <li><a href="/viewUser">Страница</a></li>
+                                <li><a href="/logout">Выход</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             {% endif %}
     </div>
 </div>

@@ -28,6 +28,15 @@ class ProjectListOperation(
             .limit(pageIndex * pageSize, pageSize)
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
+    fun listPaginationFiltered(pageIndex: Int): List<Project> =
+        database
+            .from(ProjectTable)
+            .joinReferencesAndSelect()
+            .orderBy(ProjectTable.startdate.desc()) //eq database.projects.sortedBy({it.enddate.desc()}, {it.startdate.desc()}).toList()
+            .orderBy(ProjectTable.enddate.desc())
+            .limit(pageIndex * pageSize, pageSize)
+            .mapNotNull { row -> ProjectTable.createEntity(row) }
+
     fun list(): List<Project> =
         database
             .from(ProjectTable)
@@ -42,8 +51,8 @@ class ProjectListOperation(
             .select(ProjectTable.name)
             .mapNotNull { row -> row[ProjectTable.name]!! }
 
-    fun listByBusinessmanId(businessmanId: Int): List<Project> =
-        database.from(ProjectTable).select().where { ProjectTable.businessman eq businessmanId }
+    fun listByBusinessmanId(userId: Int): List<Project> =
+        database.from(ProjectTable).select().where { ProjectTable.user eq userId }
             .mapNotNull { row -> ProjectTable.createEntity(row) }
 
     fun getTotalCount(filter: () -> ColumnDeclaring<Boolean>) = database
@@ -52,8 +61,18 @@ class ProjectListOperation(
         .where(filter)
         .totalRecords
 
+    fun getTotalCount() = database
+        .from(ProjectTable)
+        .joinReferencesAndSelect()
+        .totalRecords
+
     fun getPagesCount(filter: () -> ColumnDeclaring<Boolean>): Int {
         val res = getTotalCount(filter).toDouble() / pageSize.toDouble()
+        return res.toBigDecimal().setScale(0, RoundingMode.CEILING).toInt()
+    }
+
+    fun getPagesCount(): Int {
+        val res = getTotalCount().toDouble() / pageSize.toDouble()
         return res.toBigDecimal().setScale(0, RoundingMode.CEILING).toInt()
     }
 }

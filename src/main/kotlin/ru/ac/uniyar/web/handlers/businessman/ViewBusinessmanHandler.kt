@@ -11,10 +11,8 @@ import org.http4k.routing.path
 import org.http4k.template.ViewModel
 import org.ktorm.dsl.eq
 import ru.ac.uniyar.domain.database.InvestmentTable
-import ru.ac.uniyar.domain.operations.queries.BusinessmanListOperation
-import ru.ac.uniyar.domain.operations.queries.BusinessmanFetchOperation
-import ru.ac.uniyar.domain.operations.queries.InvestmentFetchOperation
-import ru.ac.uniyar.domain.operations.queries.ProjectListOperation
+import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.operations.queries.*
 import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.models.businessman.BusinessmanListVM
@@ -22,12 +20,12 @@ import ru.ac.uniyar.web.models.businessman.BusinessmenDetailedVM
 import java.time.LocalDateTime
 
 fun listBusinessmanViewHandler(
-    businessmanListOperation: BusinessmanListOperation,
+    businessmanListOperation: UsersListOperation,
     projectListOperation: ProjectListOperation,
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
-        val businessmans = businessmanListOperation.list()
+        val businessmans = businessmanListOperation.list(TypesEnum.BUSINESSMAN)
         val projectsCount: MutableMap<String, Int> = mutableMapOf()
         for (p in businessmans) {
             val projects =
@@ -40,7 +38,7 @@ fun listBusinessmanViewHandler(
 
 fun detailedBusinessmanHandler(
     projectListOperation: ProjectListOperation,
-    businessmanFetchOperation: BusinessmanFetchOperation,
+    businessmanFetchOperation: UserFetchOperation,
     investmentFetchOperation: InvestmentFetchOperation,
     htmlView: ContextAwareViewRender
 ): HttpHandler =
@@ -60,6 +58,13 @@ fun detailedBusinessmanHandler(
             successProjects[p.name] = projectsSum[p.name]!! > p.fundSize
             projectClosed[p.name] = p.endDate <= LocalDateTime.now()
         }
-        val viewModel = BusinessmenDetailedVM(businessman, backUri ?: "/viewBusinessman", listOfProject, projectsSum, successProjects, projectClosed)
+        val viewModel = BusinessmenDetailedVM(
+            businessman,
+            backUri ?: "/viewBusinessman",
+            listOfProject,
+            projectsSum,
+            successProjects,
+            projectClosed
+        )
         Response(Status.OK).with(htmlView(request) of viewModel)
     }

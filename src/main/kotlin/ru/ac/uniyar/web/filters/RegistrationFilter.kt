@@ -9,13 +9,15 @@ import org.http4k.lens.webForm
 class RegistrationFilter {
     companion object {
         val nameField = FormField.nonEmptyString().required("name")
+        val feedbackField = FormField.nonEmptyString().required("feedback")
         val passField = FormField.nonEmptyString().required("password")
         val passCheckField = FormField.nonEmptyString().required("passwordCheck")
         val registrationLens = Body.webForm(
             Validator.Feedback,
             nameField,
             passField,
-            passCheckField
+            passCheckField,
+            feedbackField
         ).toLens()
     }
 }

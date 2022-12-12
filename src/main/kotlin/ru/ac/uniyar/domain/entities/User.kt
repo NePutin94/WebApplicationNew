@@ -7,8 +7,9 @@ interface User : Entity<User> {
     var creationDate: LocalDateTime
     var name: String
     var password: String
-    val type: Int
-    val id: Int
+    var feedback: String
+    var type: UserType
+    var id: Int
 
     companion object : Entity.Factory<User>()
 }

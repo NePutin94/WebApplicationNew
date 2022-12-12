@@ -9,12 +9,14 @@ class InvestmentFilter {
         val nameField = FormField.string().optional("name")
         val amountField = FormField.int().required("amount")
         val feedbackField = FormField.string().optional("feedback")
+        val useProfileDataField = FormField.string().optional("useProfileData")
         val investLens = Body.webForm(
             Validator.Feedback,
             projectField,
             nameField,
             amountField,
-            feedbackField
+            feedbackField,
+            useProfileDataField
         ).toLens()
     }
 }

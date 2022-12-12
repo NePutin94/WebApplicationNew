@@ -5,6 +5,8 @@ import org.ktorm.dsl.*
 import org.ktorm.schema.ColumnDeclaring
 import ru.ac.uniyar.domain.entities.Investment
 import ru.ac.uniyar.domain.database.InvestmentTable
+import ru.ac.uniyar.domain.database.UsersTable
+import java.lang.Exception
 import java.math.RoundingMode
 
 class InvestmentListOperation(
@@ -39,6 +41,13 @@ class InvestmentListOperation(
             .where { InvestmentTable.project eq projectId }
             .orderBy(InvestmentTable.creationdate.desc())
             .mapNotNull { row -> InvestmentTable.createEntity(row) }
+
+    fun listByUserProject(userName: String, projectId: Int): List<Investment> {
+        return database.from(InvestmentTable).joinReferencesAndSelect()
+            .where { InvestmentTable.invName eq userName and (InvestmentTable.project eq projectId) }
+            .orderBy(InvestmentTable.creationdate.desc())
+            .mapNotNull { row -> InvestmentTable.createEntity(row) }
+    }
 
     fun getTotalCount(filter: () -> ColumnDeclaring<Boolean>) = database
         .from(InvestmentTable)

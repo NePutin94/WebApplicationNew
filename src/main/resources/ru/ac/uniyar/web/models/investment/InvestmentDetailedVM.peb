@@ -3,7 +3,6 @@
 
     <div class="grid-container full">
         <div class="grid-y ">
-            <div class="cell"><a href="{{ model.backUri }}" class="button">Назад</a></div>
             <div class="cell">
                 <h2><a
                         href="/viewProjects/{{ model.investment.project.id }}?backUri=/viewInvestment/{{ model.investment.id }}">

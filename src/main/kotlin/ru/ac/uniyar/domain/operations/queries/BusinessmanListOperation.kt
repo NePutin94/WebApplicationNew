@@ -5,6 +5,8 @@ import org.ktorm.dsl.*
 import org.ktorm.schema.ColumnDeclaring
 import ru.ac.uniyar.domain.entities.Businessman
 import ru.ac.uniyar.domain.database.BusinessmanTable
+import ru.ac.uniyar.domain.database.UsersTable
+import ru.ac.uniyar.domain.entities.User
 
 class BusinessmanListOperation(
     private val database: Database,
@@ -17,11 +19,12 @@ class BusinessmanListOperation(
             .orderBy(BusinessmanTable.creationdate.desc())
             .mapNotNull { row -> BusinessmanTable.createEntity(row) }
 
-    fun list(): List<Businessman> =
+    fun list(): List<User> =
         database
-            .from(BusinessmanTable)
+            .from(UsersTable)
             .joinReferencesAndSelect()
-            .orderBy(BusinessmanTable.creationdate.desc())
-            .mapNotNull { row -> BusinessmanTable.createEntity(row) }
+            .where { UsersTable.type eq 1 }
+          //  .orderBy(BusinessmanTable.creationdate.desc())
+            .mapNotNull { row -> UsersTable.createEntity(row) }
 
 }

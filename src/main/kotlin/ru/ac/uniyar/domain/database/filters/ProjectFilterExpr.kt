@@ -17,7 +17,7 @@ fun makeProjectFilterExpr(
 ): ColumnDeclaring<Boolean> {
     var filterExpr: ColumnDeclaring<Boolean> = ProjectTable.id eq 0 or true //always true
     if (businessmanId != null) {
-        filterExpr = filterExpr.and(ProjectTable.businessman eq businessmanId)
+        //filterExpr = filterExpr.and(ProjectTable.businessman eq businessmanId)
     }
     if (fundSize != 0) {
         filterExpr = when (fundSizeOp!!) {

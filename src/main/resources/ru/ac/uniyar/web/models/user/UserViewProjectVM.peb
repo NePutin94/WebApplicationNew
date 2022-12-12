@@ -1,0 +1,199 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+
+        {% macro valueNullCheckl(valueNull, value) %}
+            {% if valueNull is null %}{{value}}{% else %}{{valueNull}}{% endif %}
+        {% endmacro %}
+
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <div class="grid-y">
+                    <div class="cell">
+                        <h2> {{ model.project.name }}
+                            {% if model.IsClosed %}
+                                [Закрыт]
+                            {% endif %}</h2>
+                    </div>
+                    {% if model.IsClosed %}
+                        {% if model.AmountCollected >= model.project.fundSize %}
+                            <div class="cell">
+                <span class="label success">Проект успешен, собрано {{ model.AmountCollected }}
+                    из {{ model.project.fundSize }}</span>
+                            </div>
+                            {% else %}
+                            <div class="cell">
+                <span class="label alert">Проект провален, собрано {{ model.AmountCollected }}
+                    из {{ model.project.fundSize }}</span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="cell">
+                        <span class="label primary">{{ model.project.creationDate | date("yyyy-MM-dd") }}</span>
+                    </div>
+                    <div class="cell" style="margin-top: 5px;">
+                            {% if model.NumberInvestments == 0 and not model.IsClosed %}
+                            <a class="button small alert" href="/deleteProject/{{model.project.id}}">Удалить проект</a>
+                            {% endif %}
+                    </div>
+                    <div class="cell">
+                            {% if not model.IsClosed %}
+                            <a class="button small alert" href="/deleteProject/{{model.project.id}}">Закрыть проект
+                                досрочно</a>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="cell">
+                <hr class="rounded">
+            </div>
+            <ul class="tabs" data-tabs id="example-tabs">
+                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Проект</a></li>
+                <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Инвестиции</a></li>
+                {% if not model.IsClosed %}
+                    <li class="tabs-title"><a data-tabs-target="panel3" href="#panel3">Статистика</a></li>
+                {% endif %}
+                <li class="tabs-title"><a data-tabs-target="panel4" href="#panel3">Редактировать</a></li>
+            </ul>
+
+            <div class="tabs-content" data-tabs-content="example-tabs">
+                <div class="tabs-panel is-active" id="panel1">
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Предприниматель</h5>
+                            <p>
+                                <a href="/viewBusinessman/{{ model.project.businessman.id }}?backUri=viewProject/{{ model.project.id }}">{{ model.project.businessman.name }}</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Описание</h5>
+                            <p>{{ model.project.description}}</p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Период сбора средств</h5>
+                            <p>{{ model.project.startDate | date("yyyy-MM-dd") }}
+                                - {{ model.project.endDate | date("yyyy-MM-dd") }}</p>
+                        </div>
+                    </div>
+                    <div class="cell">
+                        <div class="callout secondary">
+                            <h5>Размер фонда</h5>
+                            <p>{{ model.project.fundSize }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabs-panel" id="panel2">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th width="180">Имя инвестора</th>
+                            <th width="200">Дата инвестиции</th>
+                            <th width="150">Сумма инвестиции</th>
+                            <th width="200">Контакты</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                                {% for investment in model.investmentList %}
+                            <tr>
+                                <td>{{ investment.invName }}</td>
+                                <td>{{ investment.creationDate | date("yyyy-MM-dd', 'HH:mm") }}</td>
+                                <td>{{ investment.amount }}</td>
+                                <td>{{ investment.feedback }}</td>
+                                <td>
+                                    <a href="/viewInvestment/{{ investment.id }}?backUri=/viewProjects/{{ model.project.id }}">
+                                        Подробно </a></td>
+                            </tr>
+                                {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% if not model.IsClosed %}
+                    <div class="tabs-panel" id="panel3">
+                        <div class="callout secondary">
+                            <h5>Средств собрано</h5>
+                            <p>{{ model.AmountCollected }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Времени осталось</h5>
+                            <p>{{ model.RemainingTime }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Количество инвестиций</h5>
+                            <p>{{ model.NumberInvestments }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Прогноз успешности</h5>
+                            <p>{{ model.SuccessForecast }}</p>
+                        </div>
+                        <div class="callout secondary">
+                            <h5>Средняя сумма инвестиций в день</h5>
+                            <p>{{ model.AmountPerDat }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="tabs-panel" id="panel4">
+                    <form method="POST">
+                        {{ model.message }}
+                        {% if model.form.errors is not empty %}
+                            {% for err in model.form.errors %}
+                                <p>{{err}}</p>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="grid-container full">
+                            <div class="grid-y grid-padding-x">
+                                <div class="medium-6 cell">
+                                    <input type="text" placeholder="Название проекта" name="name"
+                                           value="{{valueNullCheckl(model.form.fields["name"]|first,model.project.name)}}">
+                                </div>
+                                <div class="medium-6 cell">
+                                    <textarea placeholder="Описание"
+                                              name="description">{{valueNullCheckl(model.form.fields["description"]|first,model.project.description)}}</textarea>
+                                </div>
+                                <div class="medium-6 cell">
+                                    <div class="input-group">
+                                        <span class="input-group-label">Размер фонда</span>
+                                        <input class="input-group-field" type="number" name="fundSize"
+                                               value="{{valueNullCheckl(model.form.fields["fundSize"]|first,model.project.fundSize)}}">
+                                    </div>
+                                </div>
+                                <div class="medium-6 cell">
+                                    <div class="grid-container">
+                                        <div class="grid-x ">
+                                            <div class="cell small-2">
+                                                Дата начала.
+                                            </div>
+                                            <div class="cell auto">
+                                                <input type="datetime-local" placeholder="Дата начала" name="startDate"
+                                                       value="{{valueNullCheckl(model.form.fields["startDate"]|first,model.project.startDate)}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="medium-6 cell">
+                                    <div class="grid-container">
+                                        <div class="grid-x ">
+                                            <div class="cell small-2">
+                                                Дата окончания.
+                                            </div>
+                                            <div class="cell auto">
+                                                <input type="datetime-local" placeholder="Дата окончания" name="endDate"
+                                                       value="{{valueNullCheckl(model.form.fields["endDate"]|first,model.project.endDate)}}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="medium-6 cell">
+                                    <button class="button">Изменить</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

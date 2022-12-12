@@ -12,6 +12,7 @@ import org.http4k.routing.path
 import org.http4k.template.ViewModel
 import org.ktorm.entity.toList
 import ru.ac.uniyar.domain.database.filters.makeProjectFilterExpr
+import ru.ac.uniyar.domain.entities.TypesEnum
 import ru.ac.uniyar.domain.operations.queries.*
 import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.filters.BasicFilters
@@ -62,12 +63,12 @@ fun detailedProjectViewHandler(
 
 fun listProjectsViewHandler(
     projectListOperation: ProjectListOperation,
-    businessmanListOperation: BusinessmanListOperation,
+    businessmanListOperation: UsersListOperation,
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
         val businessman = ProjectSearchFilter.businessmanField(request)
-        val bNames = businessmanListOperation.list()
+        val bNames = businessmanListOperation.list(TypesEnum.BUSINESSMAN)
         val businessmanId =
             if (businessman == "Select all") null else bNames.firstOrNull { it.name == businessman }
 

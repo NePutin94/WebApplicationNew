@@ -1,26 +1,49 @@
     {% extends "../PageVM.peb" %}
     {% block content %}
-    <form method="POST" >
+    <form method="POST">
         {% if model.form.errors is not empty %}
             {% for err in model.form.errors %}
                 <p>{{err}}</p>
             {% endfor %}
         {% endif %}
+
         <div class="grid-container">
             <div class="grid-y grid-padding-x">
                 <div class="medium-6 cell">
-                    <input type="text" placeholder="Проект" name="project" value="{{model.form.fields["project"] | first}}">
+                    <div class="grid-x grid-margin-x">
+                        <div class="cell small-1">
+                            <div class="switch">
+                                <input class="switch-input" id="useProfileData" type="checkbox"
+                                    {% if model.form.fields["useProfileData"] | first %}
+                                       checked
+                                    {% endif %}
+                                       name="useProfileData">
+                                <label class="switch-paddle" for="useProfileData">
+                                    <span class="show-for-sr"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="cell small-6">
+                            Использовать информацию из профиля?
+                        </div>
+                    </div>
+                </div>
+                <div class="medium-6 cell">
+                    <input type="text" placeholder="Проект" name="project"
+                           value="{{model.form.fields["project"] | first}}">
                 </div>
                 <div class="medium-6 cell">
                     <input type="text" placeholder="Ваше имя" name="name" value="{{model.form.fields["name"] | first}}">
                 </div>
                 <div class="medium-6 cell">
-                    <input type="text" placeholder="Контакты" name="feedback" value="{{model.form.fields["feedback"] | first}}">
+                    <input type="text" placeholder="Контакты" name="feedback"
+                           value="{{model.form.fields["feedback"] | first}}">
                 </div>
                 <div class="medium-6 cell">
                     <div class="input-group">
                         <span class="input-group-label">Сумма инвестирования</span>
-                        <input class="input-group-field" type="number" name="amount" value="{{model.form.fields["amount"] | first}}">
+                        <input class="input-group-field" type="number" name="amount"
+                               value="{{model.form.fields["amount"] | first}}">
                     </div>
                 </div>
                 <div class="medium-6 cell">

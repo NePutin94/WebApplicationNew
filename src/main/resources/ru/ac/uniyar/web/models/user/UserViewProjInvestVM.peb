@@ -1,0 +1,48 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <div class="grid-y">
+                    <div class="cell">
+                        <h2> Ваши инвестиции в проект {{ model.project.name }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="cell">
+                <div class="grid-container full">
+                    <div class="grid-y ">
+                            {% for inv in model.investments %}
+                            <div class="cell">
+                                <div class="callout">
+                                    <h5>
+                                        <a href="/viewInvestment/{{ inv.id }}">{{ inv.name }}</a>
+                                    </h5>
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th width="150">Размер инвестиции</th>
+                                            <th width="150">Дата инвестиции</th>
+                                            <th width="150">Обратная связь</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ inv.amount }}</td>
+                                            <td>{{ inv.creationDate | date("yyyy-MM-dd")}}</td>
+                                            <td>{{ inv.feedback }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% endblock %}

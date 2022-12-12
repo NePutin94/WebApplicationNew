@@ -7,6 +7,7 @@ interface Investment : Entity<Investment> {
     val id: Int
     var creationDate: LocalDateTime
     var project: Project
+   // var user: User?
     var invName: String?
     var feedback: String?
     var amount: Int

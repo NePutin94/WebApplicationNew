@@ -1,7 +1,5 @@
     {% extends "../PageVM.peb" %}
     {% block content %}
-    <form id="FormSelectName" method="GET"></form>
-
     <form method="POST">
         {{ model.message }}
         {% if model.form.errors is not empty %}
@@ -17,27 +15,13 @@
                             Имя предпринимателя
                         </div>
                         <div class="cell small-6">
-                            <button class="button" type="button"
-                                    data-toggle="example-dropdown2"
-                                    form="FormSelectName">{{model.selectedBName}}</button>
-                            <div class="dropdown-pane top" id="example-dropdown2" data-dropdown>
-                                <div class="grid-y grid-margin-y">
-                                    {% for businessman in model.businessmanNames %}
-                                        <div class="cell">
-                                            <input type="submit" name="businessman" value="{{businessman}}"
-                                                   form="FormSelectName"/>
-                                        </div>
-                                    {% endfor %}
-                                    <div class="cell">
-                                        <input type="submit" name="businessman" value="None" form="FormSelectName"/>
-                                    </div>
-                                </div>
-                            </div>
+                                {{ model.userName }}
                         </div>
                     </div>
                 </div>
                 <div class="medium-6 cell">
-                    <input type="text" placeholder="Название проекта" name="name" value="{{model.form.fields["name"] | first}}">
+                    <input type="text" placeholder="Название проекта" name="name"
+                           value="{{model.form.fields["name"] | first}}">
                 </div>
                 <div class="medium-6 cell">
                     <textarea placeholder="Описание"

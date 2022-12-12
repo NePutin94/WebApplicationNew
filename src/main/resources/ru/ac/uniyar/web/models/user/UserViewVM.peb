@@ -1,0 +1,153 @@
+    {% extends "../PageVM.peb" %}
+    {% block content %}
+
+    <div class="grid-container full">
+        <div class="grid-y ">
+            <div class="cell">
+                <div class="callout secondary">
+                    <div class="grid-y">
+                        <div class="cell">
+                            <h2> {{ model.user.name }}</h2>
+                        </div>
+                        <div class="cell">
+                            Дата создания: {{ model.user.creationDate | date("yyyy-MM-dd") }}
+                        </div>
+                    </div>
+                    <div class="cell">
+                        Тип учетной записи: {{ model.user.type.name }}
+                    </div>
+                    <div class="cell">
+                        Обратная связь: {{ model.user.feedback }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="cell">
+                <hr class="rounded">
+            </div>
+
+            <div class="cell">
+                <a class="button small" href="/addProject">Создать проект</a>
+            </div>
+
+            <ul class="tabs" data-tabs id="example-tabs">
+                <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Инвестиции</a></li>
+                <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Проекты</a></li>
+            </ul>
+
+            <div class="cell">
+                <div class="tabs-content" data-tabs-content="example-tabs">
+                    <div class="tabs-panel is-active" id="panel1">
+                        <h3>Список проектов в которые вы инветсировали:</h3>
+                        <div class="grid-container full">
+                            <div class="grid-y ">
+                                <form method="GET">
+                                    <div class="cell">
+                                        <div class="grid-x grid-margin-x">
+                                            <div class="cell small-1">
+                                                <div class="switch">
+                                                    <input class="switch-input" id="projectIsClosed" type="checkbox"
+                                                        {% if model.form.fields["projectIsClosed"] | first %}
+                                                           checked
+                                                        {% endif %}
+                                                           name="useProfileData">
+                                                    <label class="switch-paddle" for="projectIsClosed">
+                                                        <span class="show-for-sr"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="cell small-6">
+                                                В начале закрытые проекты?
+                                            </div>
+                                        </div>
+                                        <div class="cell small-6">
+                                            <div class="grid-x grid-margin-x">
+                                                <div class="cell small-3">
+                                                    <input type="date" placeholder="Дата начала" name="endDateL"
+                                                           value="{{model.endDateL }}">
+                                                </div>
+                                                --
+                                                <div class="cell small-3">
+                                                    <input type="date" placeholder="Дата начала" name="endDateR"
+                                                           value="{{model.endDateR }}">
+                                                </div>
+                                                <div class="cell small-3">
+                                                    Дата окончания
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cell small-6">
+                                            <button class="button">Поиск</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                                {% for project in model.investments %}
+                                    <div class="cell">
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th width="150">Проект</th>
+                                                <th width="150">Размер фонда</th>
+                                                <th width="150">Дата старта</th>
+                                                <th width="150">Дата закрытия</th>
+                                                <th width="150">Сумма инвестиций</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a href="/viewProjects/{{ project.key.id }}">{{ project.key.name }}</a>
+                                                </td>
+                                                <td>{{ project.key.fundSize }}</td>
+                                                <td>{{ project.key.startDate | date("yyyy-MM-dd")}}</td>
+                                                <td>{{ project.key.endDate | date("yyyy-MM-dd")}}</td>
+                                                <td>
+                                                    <a href="/userProjectInvestments/{{ project.key.id }}">{{ model.projectsInvestSum[project.key.id] }}</a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tabs-content" data-tabs-content="example-tabs">
+                    <div class="tabs-panel" id="panel2">
+                        <h3>Список ваших проектов:</h3>
+                        <div class="grid-container full">
+                            <div class="grid-y ">
+                                    {% for project in model.projects %}
+                                    <div class="cell">
+                                        <table>
+                                            <thead>
+                                            <tr>
+                                                <th width="150">Проект</th>
+                                                <th width="150">Размер фонда</th>
+                                                <th width="150">Дата старта</th>
+                                                <th width="150">Дата закрытия</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><a href="/userViewProject/{{ project.id }}">{{ project.name }}</a>
+                                                </td>
+                                                <td>{{ project.fundSize }}</td>
+                                                <td>{{ project.startDate | date("yyyy-MM-dd")}}</td>
+                                                <td>{{ project.endDate | date("yyyy-MM-dd")}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

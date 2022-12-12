@@ -14,7 +14,7 @@ class ProjectAddOperation(private val database: Database) {
             set(it.enddate, project.endDate)
             set(it.fundsize, project.fundSize)
             set(it.description, project.description)
-            set(it.businessman, project.businessman.id)
+            set(it.user, project.user.id)
         }
         return id
     }
