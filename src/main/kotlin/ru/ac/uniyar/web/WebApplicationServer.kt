@@ -6,9 +6,7 @@ import org.http4k.core.ContentType.Companion.TEXT_HTML
 import org.http4k.core.cookie.Cookie
 import org.http4k.core.cookie.cookie
 import org.http4k.core.cookie.cookies
-import org.http4k.core.cookie.removeCookie
 import org.http4k.filter.ServerFilters
-import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.RequestContextKey
 import org.http4k.lens.RequestContextLens
 import org.http4k.routing.ResourceLoader
@@ -17,13 +15,10 @@ import org.http4k.routing.routes
 import org.http4k.routing.static
 import org.http4k.server.Undertow
 import org.http4k.server.asServer
-import org.http4k.template.PebbleTemplates
-import org.http4k.template.ViewModel
-import org.http4k.template.viewModel
 import ru.ac.uniyar.AppConfig.Companion.webPortLens
 import ru.ac.uniyar.domain.authorization.JwtTools
 import ru.ac.uniyar.domain.database.*
-import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.entities.UserTypesEnum
 import ru.ac.uniyar.domain.entities.User
 import ru.ac.uniyar.domain.operations.OperationHolder
 import ru.ac.uniyar.domain.operations.queries.UserFetchOperation
@@ -32,7 +27,6 @@ import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.context.UsetState
 import ru.ac.uniyar.web.models.ErrorMessageVM
 import ru.ac.uniyar.web.handlers.Web
-import ru.ac.uniyar.web.models.businessman.BusinessmanAddVM
 import ru.ac.uniyar.web.permission.*
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -65,7 +59,7 @@ fun startDbServer(): H2DatabaseManager {
     println("Веб-интерфейс базы данных доступен по адресу http://localhost:${H2DatabaseManager.WEB_PORT}")
     println("Введите любую строку, чтобы завершить работу приложения")
     //if filling is used, it is better to clear the database first
-    databaseManager.dropAll()
+    //databaseManager.dropAll()
     performMigrations()
     return databaseManager
 }
@@ -102,7 +96,7 @@ fun addStateFilter(
                                 userFetch.fetch(userId!!.toInt())!! //throws an exception
                             } else
                                 currContext.user
-                        val perm = setPerm(TypesEnum.fromInt(user.type.id))
+                        val perm = setPerm(UserTypesEnum.fromInt(user.type.id))
                         next(
                             request.with(contextLens of UsetState(user.id.toString(), user))
                                 .with(premLens of perm)
@@ -145,7 +139,6 @@ fun startWebServer(operationHolder: OperationHolder, appEnv: Environment, jwt: J
     println("Server started on http://localhost:" + server.port())
 }
 
-
 fun startApplication() {
 
     val jwtGen = JwtTools("bvn%yW5*bd", "Co-financing", 80000)
@@ -159,7 +152,7 @@ fun startApplication() {
     val opHolder = OperationHolder(db)
 
     //filling the database
-    fill(opHolder, appEnv)
+    //fill(opHolder, appEnv)
 
     startWebServer(opHolder, appEnv, jwtGen)
 

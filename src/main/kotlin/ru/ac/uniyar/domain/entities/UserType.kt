@@ -1,7 +1,6 @@
 package ru.ac.uniyar.domain.entities
 
 import org.ktorm.entity.Entity
-import java.time.LocalDateTime
 
 interface UserType : Entity<UserType> {
     var name: String
@@ -10,10 +9,10 @@ interface UserType : Entity<UserType> {
     companion object : Entity.Factory<UserType>()
 }
 
-enum class TypesEnum(val value: Int) {
+enum class UserTypesEnum(val value: Int) {
     AUTHORIZED(1),
     BUSINESSMAN(2);
     companion object {
-        fun fromInt(value: Int) = TypesEnum.values().first { it.value == value }
+        fun fromInt(value: Int) = UserTypesEnum.values().first { it.value == value }
     }
 }

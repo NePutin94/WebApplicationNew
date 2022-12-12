@@ -17,14 +17,14 @@ fun fill(opHolder: OperationHolder, appEnv : Environment) {
         name = "Ivan"
         password = "1234"
         feedback = "test@mail.ru"
-        type = userTFetch.fetch(TypesEnum.BUSINESSMAN)!!
+        type = userTFetch.fetch(UserTypesEnum.BUSINESSMAN)!!
     }, appEnv["auth_salt"].toString())
 
     val Sergey = addUser.add(User {
         name = "Sergey"
         password = "4321"
         feedback = "sadas@mail.ru"
-        type = userTFetch.fetch(TypesEnum.BUSINESSMAN)!!
+        type = userTFetch.fetch(UserTypesEnum.BUSINESSMAN)!!
     }, appEnv["auth_salt"].toString())
 
     val CarCompany = addProject.add(Project {

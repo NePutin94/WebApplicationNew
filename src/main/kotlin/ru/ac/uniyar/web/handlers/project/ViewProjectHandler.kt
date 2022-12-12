@@ -8,7 +8,7 @@ import org.http4k.lens.Query
 import org.http4k.lens.int
 import org.http4k.routing.path
 import ru.ac.uniyar.domain.database.filters.makeProjectFilterExpr
-import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.entities.UserTypesEnum
 import ru.ac.uniyar.domain.operations.queries.FetchProjectOperation
 import ru.ac.uniyar.domain.operations.queries.InvestmentListOperation
 import ru.ac.uniyar.domain.operations.queries.ProjectListOperation
@@ -62,7 +62,7 @@ fun listProjectsViewHandler(
 ): HttpHandler =
     { request ->
         val businessman = ProjectSearchFilter.businessmanField(request)
-        val bNames = businessmanListOperation.list(TypesEnum.BUSINESSMAN)
+        val bNames = businessmanListOperation.list(UserTypesEnum.BUSINESSMAN)
         val businessmanId =
             if (businessman == "Select all") null else bNames.firstOrNull { it.name == businessman }
 

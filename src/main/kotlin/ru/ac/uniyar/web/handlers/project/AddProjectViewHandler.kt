@@ -6,7 +6,7 @@ import org.http4k.core.Status
 import org.http4k.core.with
 import org.http4k.lens.RequestContextLens
 import ru.ac.uniyar.domain.entities.Project
-import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.entities.UserTypesEnum
 import ru.ac.uniyar.domain.operations.commands.ProjectAddOperation
 import ru.ac.uniyar.domain.operations.commands.UserUpdateOperation
 import ru.ac.uniyar.util.ContextAwareViewRender
@@ -48,8 +48,8 @@ fun addProjectFormHandler(
             startDate = fstartDate
             endDate = fendDate
         })
-        if (userC.user.type.id == TypesEnum.AUTHORIZED.value) //type: auth -> businessman
-            userUpdate.update(userC.user.id, TypesEnum.BUSINESSMAN.value)
+        if (userC.user.type.id == UserTypesEnum.AUTHORIZED.value) //type: auth -> businessman
+            userUpdate.update(userC.user.id, UserTypesEnum.BUSINESSMAN.value)
         Response(Status.FOUND).header("Location", "/viewProjects/$id")
     } else {
         val viewModel = ProjectAddVM(

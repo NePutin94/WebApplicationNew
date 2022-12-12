@@ -20,12 +20,12 @@ val BusinessmanRoutes: (operationHolder: OperationHolder, ContextAwareViewRender
                 htmlView
             ),
             "/viewBusinessman/{id}" bind Method.GET to permissionFilter(permissionLens, Permissions::canViewBusinessmans).then(detailedBusinessmanHandler(
+                operationHolder.userInvs,
                 operationHolder.listProjectsOperation,
                 operationHolder.userFetch,
-                operationHolder.fetchInvestments,
                 htmlView
             )),
             //"/addBusinessman" bind Method.GET to addBusinessmanViewHandler(htmlView),
-           // "/addBusinessman" bind Method.POST to addBusinessmanFormHandler(htmlView, operationHolder.addBusinessman)
+            //"/addBusinessman" bind Method.POST to addBusinessmanFormHandler(htmlView, operationHolder.addBusinessman)
         )
     }

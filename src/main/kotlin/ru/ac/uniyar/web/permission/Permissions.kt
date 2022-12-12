@@ -1,6 +1,6 @@
 package ru.ac.uniyar.web.permission
 
-import ru.ac.uniyar.domain.entities.TypesEnum
+import ru.ac.uniyar.domain.entities.UserTypesEnum
 
 data class Permissions(
     val canAddInvestment: Boolean = false,
@@ -12,25 +12,18 @@ data class Permissions(
     val canDeleteProject: Boolean = false,
     val canViewInvestmentsOfProject: Boolean = false,
     val canViewBusinessmans : Boolean = true
-) {
-    companion object {
-        fun canAddInvestment(perm: Permissions): Boolean {
-            return perm.canAddInvestment
-        }
-    }
-}
-
+)
 val Guest = Permissions()
-val AuthorizedUserPerm = Permissions(true, true, true, canViewInvestmentsOfProject = true)
+val AuthorizedUserPerm = Permissions(true, true, true, canViewInvestmentsOfProject = true, canViewBusinessmans = true)
 val BusinessmanPerm = Permissions(
     true, true, true, true,
-    true, true, true, true
+    true, true, true, true, true
 )
 
-fun setPerm(type: TypesEnum): Permissions {
+fun setPerm(type: UserTypesEnum): Permissions {
     return when (type) {
-        TypesEnum.AUTHORIZED -> AuthorizedUserPerm
-        TypesEnum.BUSINESSMAN -> BusinessmanPerm
+        UserTypesEnum.AUTHORIZED -> AuthorizedUserPerm
+        UserTypesEnum.BUSINESSMAN -> BusinessmanPerm
         else -> Guest
     }
 }

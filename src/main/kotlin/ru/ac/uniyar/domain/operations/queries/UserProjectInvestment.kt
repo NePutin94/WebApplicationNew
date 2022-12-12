@@ -20,12 +20,28 @@ class UserProjectInvestment(
             .mapNotNull { row -> UsersTable.createEntity(row) }.firstOrNull() ?: throw Exception("User not found")
         val invs = database
             .from(InvestmentTable)
-            .joinReferencesAndSelect()
+            .leftJoin(ProjectTable, on = ProjectTable.id eq InvestmentTable.project)
+            .select()
             .where { InvestmentTable.invName eq user.name }
             .mapNotNull { row -> InvestmentTable.createEntity(row) }
 
         return invs.groupBy { it.project }
     }
+
+    fun listTest(userId: Int): Map<Project, List<Investment>> {
+        val user = database.from(UsersTable).select().where { UsersTable.id eq userId }
+            .mapNotNull { row -> UsersTable.createEntity(row) }.firstOrNull() ?: throw Exception("User not found")
+
+        val invs = database
+            .from(ProjectTable)
+            .leftJoin(InvestmentTable, on = ProjectTable.id eq InvestmentTable.project)
+            .select()
+            .where { InvestmentTable.invName eq user.name }
+            .mapNotNull { row -> InvestmentTable.createEntity(row) }
+
+        return invs.groupBy { it.project }
+    }
+
 
     fun list(userId: Int, filter: () -> ColumnDeclaring<Boolean>): Map<Project, List<Investment>> {
         val user = database.from(UsersTable).select().where { UsersTable.id eq userId }

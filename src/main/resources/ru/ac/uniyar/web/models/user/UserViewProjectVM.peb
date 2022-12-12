@@ -38,7 +38,7 @@
                     </div>
                     <div class="cell">
                             {% if not model.IsClosed %}
-                            <a class="button small alert" href="/deleteProject/{{model.project.id}}">Закрыть проект
+                            <a class="button small alert" href="/closeProject/{{model.project.id}}">Закрыть проект
                                 досрочно</a>
                             {% endif %}
                     </div>
@@ -62,7 +62,7 @@
                         <div class="callout secondary">
                             <h5>Предприниматель</h5>
                             <p>
-                                <a href="/viewBusinessman/{{ model.project.businessman.id }}">{{ model.project.businessman.name }}</a>
+                                <a href="/viewBusinessman/{{ model.project.user.id }}">{{ model.project.user.name }}</a>
                             </p>
                         </div>
                     </div>

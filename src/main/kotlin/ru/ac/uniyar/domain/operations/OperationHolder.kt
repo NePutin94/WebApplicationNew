@@ -6,7 +6,7 @@ import ru.ac.uniyar.domain.operations.queries.*
 
 class OperationHolder(database: Database) {
     //query
-    val listProjectsOperation = ProjectListOperation(database, 2)
+    val listProjectsOperation = ProjectListOperation(database, 6)
     val listInvestmentOperation = InvestmentListOperation(database, 10)
     //val businessmanListOperation = BusinessmanListOperation(database)
     val fetchProjectOperation = FetchProjectOperation(database)
