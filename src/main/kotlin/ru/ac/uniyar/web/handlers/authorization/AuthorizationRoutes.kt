@@ -25,7 +25,6 @@ val AuthorizationRoutes: (operationHolder: OperationHolder, ContextAwareViewRend
                 htmlView
             ),
             "/login" bind Method.GET to LoginHandler(
-                contextLens,
                 htmlView
             ),
             "/login" bind Method.POST to LoginFormHandler(

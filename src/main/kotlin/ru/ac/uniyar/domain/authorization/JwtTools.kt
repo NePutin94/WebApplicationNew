@@ -21,6 +21,6 @@ class JwtTools(val secret: String, val orgName: String, val lifeTime: Long) {
     }
 
     fun check(token: String): DecodedJWT? {
-        return vertify().verify(token);
+        return vertify().verify(token)
     }
 }

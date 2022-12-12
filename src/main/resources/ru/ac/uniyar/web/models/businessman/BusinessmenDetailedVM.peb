@@ -24,7 +24,7 @@
                                 <div class="cell">
                                     <div class="callout">
                                         <h5>
-                                            <a href="/viewProjects/{{ project.id }}?backUri=/viewBusinessman/{{ model.businessman.id }}">{{ project.name }}</a>
+                                            <a href="/viewProjects/{{ project.id }}">{{ project.name }}</a>
                                         </h5>
                                         <table>
                                             <thead>
@@ -54,7 +54,7 @@
                                 <div class="callout alert ">
                                 {% endif %}
                                 <h5>
-                                    <a href="/viewProjects/{{ project.id }}?backUri=/viewBusinessman/{{ model.businessman.id }}">{{ project.name }}</a>
+                                    <a href="/viewProjects/{{ project.id }}">{{ project.name }}</a>
                                 </h5>
                                 <table>
                                     <thead>

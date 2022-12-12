@@ -16,14 +16,13 @@ import ru.ac.uniyar.web.context.UsetState
 import ru.ac.uniyar.web.filters.LoginFilter
 import ru.ac.uniyar.web.filters.RegistrationFilter
 import ru.ac.uniyar.web.models.authorization.LoginVM
+import java.lang.Exception
 
 
 fun LoginHandler(
-    contextLens: RequestContextLens<UsetState?>,
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
-        val tt = contextLens(request)
         val viewModel = LoginVM()
         Response(Status.OK).with(htmlView(request) of viewModel)
     }
@@ -43,12 +42,16 @@ fun LoginFormHandler(
         if (validForm.errors.isEmpty()) {
             val fname = RegistrationFilter.nameField(validForm).trim()
             val fpass = RegistrationFilter.passField(validForm).trim()
-            val id = userList.fetch(fname, fpass, appEnv["auth.salt"].toString());
+            val id = userList.fetch(fname, fpass, appEnv["auth.salt"].toString())
             if (id == null) {
                 showError(validForm, false)
             } else {
-                val token = jwt.create(id.toString())
-                Response(Status.FOUND).header("Location", "/").cookie(Cookie("auth_token", token!!))
+                try {
+                    val token = jwt.create(id.toString())
+                    Response(Status.FOUND).header("Location", "/").cookie(Cookie("auth_token", token!!))
+                } catch (ex: Exception) {
+                    showError(validForm, true)
+                }
             }
         } else {
             showError(validForm, true)

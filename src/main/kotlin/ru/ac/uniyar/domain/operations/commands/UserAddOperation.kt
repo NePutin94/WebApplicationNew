@@ -23,7 +23,7 @@ class UserAddOperation(private val database: Database) {
         values(CURRENT_TIMESTAMP(), ?, HASH('SHA3-256',?,10), ?, ?)
     """.trimIndent()
 
-    fun add(user: User, salt: String): Any? {
+    fun add(user: User, salt: String): Any {
 
         if(database.from(UsersTable).select(UsersTable.name).where { UsersTable.name eq user.name }
                 .mapNotNull { row -> row }.isNotEmpty())

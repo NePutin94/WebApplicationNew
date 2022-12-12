@@ -4,6 +4,5 @@ import org.http4k.template.ViewModel
 import ru.ac.uniyar.domain.entities.Investment
 
 data class InvestmentDetailedVM(
-    val investment: Investment,
-    val backUri: String?
+    val investment: Investment
     ) : ViewModel

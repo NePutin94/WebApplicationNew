@@ -54,7 +54,7 @@
                 <div class="cell small-6">
                     <ul class="dropdown menu" data-dropdown-menu>
                         <li>
-                            <a href="#"><img src="/images/logo.png" style="width: 32px;height: 32px;">{{ context.name }}</a>
+                            <a href="#"><img src="/images/logo.png" style="width: 32px;height: 32px;">{{ context.user.name }}</a>
                             <ul class="menu vertical">
                                 <li><a href="/viewUser">Страница</a></li>
                                 <li><a href="/logout">Выход</a></li>

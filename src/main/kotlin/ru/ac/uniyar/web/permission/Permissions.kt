@@ -10,11 +10,12 @@ data class Permissions(
     val canEditProject: Boolean = false,
     val canCloseProject: Boolean = false,
     val canDeleteProject: Boolean = false,
-    val canViewInvestmentsOfProject: Boolean = false
+    val canViewInvestmentsOfProject: Boolean = false,
+    val canViewBusinessmans : Boolean = true
 ) {
     companion object {
         fun canAddInvestment(perm: Permissions): Boolean {
-            return perm.canAddInvestment;
+            return perm.canAddInvestment
         }
     }
 }

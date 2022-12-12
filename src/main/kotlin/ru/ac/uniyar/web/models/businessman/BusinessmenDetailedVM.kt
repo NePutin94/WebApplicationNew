@@ -7,7 +7,6 @@ import ru.ac.uniyar.domain.entities.User
 
 data class BusinessmenDetailedVM(
     val businessman: User,
-    val backUri: String?,
     val businessmanProjectList: Iterable<Project>,
     val projectsInvestSum: Map<String, Int>,
     val successProjects: Map<String, Boolean>,

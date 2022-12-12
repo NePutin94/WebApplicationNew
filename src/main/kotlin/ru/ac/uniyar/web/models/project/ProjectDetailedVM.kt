@@ -6,7 +6,6 @@ import ru.ac.uniyar.domain.entities.Investment
 
 data class ProjectDetailedVM(
     val project: Project,
-    val backUri: String,
     val investmentList: Iterable<Investment>,
     val AmountCollected : Int,
     val RemainingTime : Long,

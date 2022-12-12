@@ -63,6 +63,6 @@ fun makeInvestmentFormHandler(
                 returnResponse(fname, ffeedback, findProject, famount)
         }
     } else {
-        returnErr("", validForm);
+        returnErr("", validForm)
     }
 }

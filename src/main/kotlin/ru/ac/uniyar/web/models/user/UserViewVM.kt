@@ -13,4 +13,5 @@ data class UserViewVM(
     val projects: List<Project> = listOf(),
     val endDateL: LocalDate?,
     val endDateR: LocalDate?,
+    val projectIsClosed : Boolean?
 ) : ViewModel

@@ -47,10 +47,10 @@
                                             <div class="cell small-1">
                                                 <div class="switch">
                                                     <input class="switch-input" id="projectIsClosed" type="checkbox"
-                                                        {% if model.form.fields["projectIsClosed"] | first %}
+                                                        {% if model.projectIsClosed %}
                                                            checked
                                                         {% endif %}
-                                                           name="useProfileData">
+                                                           name="projectIsClosed">
                                                     <label class="switch-paddle" for="projectIsClosed">
                                                         <span class="show-for-sr"></span>
                                                     </label>
@@ -64,12 +64,12 @@
                                             <div class="grid-x grid-margin-x">
                                                 <div class="cell small-3">
                                                     <input type="date" placeholder="Дата начала" name="endDateL"
-                                                           value="{{model.endDateL }}">
+                                                           value="{{model.endDateL}}">
                                                 </div>
                                                 --
                                                 <div class="cell small-3">
                                                     <input type="date" placeholder="Дата начала" name="endDateR"
-                                                           value="{{model.endDateR }}">
+                                                           value="{{model.endDateR}}">
                                                 </div>
                                                 <div class="cell small-3">
                                                     Дата окончания

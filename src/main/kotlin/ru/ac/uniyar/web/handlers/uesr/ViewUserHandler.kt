@@ -22,29 +22,31 @@ fun viewUserHandler(
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
-        val userContext = context(request)!!
-        val projectIsClosed = UserProjectFilter.projectIsClosed(request) != null
-        val endDateL = lensOrNull(UserProjectFilter.endDateLField, request)?.atStartOfDay()
-        val endDateR = lensOrNull(UserProjectFilter.endDateRField, request)?.atStartOfDay()
+        val userContext = context(request)
+        if (userContext == null) {
+            Response(Status.BAD_REQUEST)
+        } else {
+            val projectIsClosed = UserProjectFilter.projectIsClosed(request) != null
+            val endDateL = lensOrNull(UserProjectFilter.endDateLField, request)?.atStartOfDay()
+            val endDateR = lensOrNull(UserProjectFilter.endDateRField, request)?.atStartOfDay()
 
-        val filterExpr = projectInvestmentFilterExpr(projectIsClosed, endDateL, endDateR)
-        val invs = if (projectIsClosed) invList.list(
-            userContext.id.toInt(),
-            true
-        ) { filterExpr } else invList.list(userContext.id.toInt(), false) { filterExpr }
+            val filterExpr = projectInvestmentFilterExpr(endDateL, endDateR)
+            val invs = invList.list(userContext.id.toInt(), projectIsClosed) { filterExpr }
 
-        val projectsInvestSum: MutableMap<Int, Int> = mutableMapOf()
-        for (inv in invs)
-            projectsInvestSum[inv.key.id] = inv.value.sumOf { it.amount }
+            val projectsInvestSum: MutableMap<Int, Int> = mutableMapOf()
+            for (inv in invs)
+                projectsInvestSum[inv.key.id] = inv.value.sumOf { it.amount }
 
-        val projects = projectList.listByBusinessmanId(userContext.user.id)
-        val viewModel = UserViewVM(
-            userContext.user,
-            invs,
-            projectsInvestSum,
-            projects,
-            endDateL?.toLocalDate(),
-            endDateR?.toLocalDate()
-        )
-        Response(Status.OK).with(htmlView(request) of viewModel)
+            val projects = projectList.listByBusinessmanId(userContext.user.id)
+            val viewModel = UserViewVM(
+                userContext.user,
+                invs,
+                projectsInvestSum,
+                projects,
+                endDateL?.toLocalDate(),
+                endDateR?.toLocalDate(),
+                projectIsClosed
+            )
+            Response(Status.OK).with(htmlView(request) of viewModel)
+        }
     }

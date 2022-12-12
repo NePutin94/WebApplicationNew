@@ -41,7 +41,7 @@ test {
 
 run{
     environment("web.port", "9000")
-    environment("auth.salt", "test")
+    environment("auth.salt", "cKh@fTy%3vaWBHS&")
 }
 
 dependencies {

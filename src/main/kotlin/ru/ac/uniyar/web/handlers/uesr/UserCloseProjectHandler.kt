@@ -11,7 +11,6 @@ import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.context.UsetState
 import java.time.LocalDateTime
 
-
 fun UserCloseProject(
     fetchProjectOp: FetchProjectOperation,
     projectUpdateOp: ProjectUpdateOperation,

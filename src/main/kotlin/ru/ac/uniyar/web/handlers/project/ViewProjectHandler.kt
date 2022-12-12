@@ -4,24 +4,21 @@ import org.http4k.core.HttpHandler
 import org.http4k.core.Response
 import org.http4k.core.Status
 import org.http4k.core.with
-import org.http4k.lens.BiDiBodyLens
 import org.http4k.lens.Query
 import org.http4k.lens.int
-import org.http4k.lens.string
 import org.http4k.routing.path
-import org.http4k.template.ViewModel
-import org.ktorm.entity.toList
 import ru.ac.uniyar.domain.database.filters.makeProjectFilterExpr
 import ru.ac.uniyar.domain.entities.TypesEnum
-import ru.ac.uniyar.domain.operations.queries.*
+import ru.ac.uniyar.domain.operations.queries.FetchProjectOperation
+import ru.ac.uniyar.domain.operations.queries.InvestmentListOperation
+import ru.ac.uniyar.domain.operations.queries.ProjectListOperation
+import ru.ac.uniyar.domain.operations.queries.UsersListOperation
 import ru.ac.uniyar.util.ContextAwareViewRender
-import ru.ac.uniyar.web.filters.BasicFilters
 import ru.ac.uniyar.web.filters.ProjectFilterParams
 import ru.ac.uniyar.web.filters.ProjectSearchFilter
 import ru.ac.uniyar.web.filters.lensOrNull
 import ru.ac.uniyar.web.models.project.ProjectDetailedVM
 import ru.ac.uniyar.web.models.project.ProjectListVM
-import java.sql.DriverManager
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -31,7 +28,6 @@ fun detailedProjectViewHandler(
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
-        val backUri = BasicFilters.backUriField(request)?.let { it.replace("*", "?").replace("~", "&") }
         val projectId = request.path("id")!!
         val findProject = projectFetchOperation.fetch(projectId.toInt())!!
         val investments = listInvestmentOperation.listByProjectId(projectId.toInt())
@@ -45,11 +41,9 @@ fun detailedProjectViewHandler(
 
         val successForecast =
             if ((findProject.fundSize - totalAmount) - remaining * amountPerDay <= 0) "Проект будет успешен" else "Проект провалится"
-        val uri = backUri ?: "/viewProjects"
 
         val viewModel = ProjectDetailedVM(
             findProject,
-            uri,
             investments.take(5),
             totalAmount,
             remaining,
@@ -92,7 +86,7 @@ fun listProjectsViewHandler(
         val index = Query.int().defaulted("page", 1)
         val page = index(request)
 
-        val pagination = projectListOperation.listPaginationFiltered(page - 1) { filterExpr };
+        val pagination = projectListOperation.listPaginationFiltered(page - 1) { filterExpr }
 
         val viewModel =
             ProjectListVM(
@@ -108,12 +102,7 @@ fun listProjectsViewHandler(
                     bNames.map { it.name },
                     businessman,
                     projectIsClosed == null
-                ),
-                request.uri.query.replace(
-                    "&page=\\d+".toRegex(),
-                    ""
-                ), //save search parameters and page when the page changes
-                request.uri.toString().replace("?", "*").replace("&", "~") //encoding a uri for bakuri
+                )
             )
 
         Response(Status.OK).with(htmlView(request) of viewModel)

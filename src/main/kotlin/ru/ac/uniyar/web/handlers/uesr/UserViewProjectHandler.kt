@@ -91,7 +91,7 @@ fun UserViewProjectFormHandler(
                     fendDate = project.endDate
                 }
 
-                projectUpdateOp.update(projectId, fname, fdesc, ffundSize, fstartDate, fendDate);
+                projectUpdateOp.update(projectId, fname, fdesc, ffundSize, fstartDate, fendDate)
 
                 Response(Status.FOUND).header("Location", "/userViewProject/${projectId}")
             } else {

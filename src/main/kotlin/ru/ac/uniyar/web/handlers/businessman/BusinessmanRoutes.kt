@@ -14,17 +14,17 @@ import ru.ac.uniyar.web.permission.Permissions
 val BusinessmanRoutes: (operationHolder: OperationHolder, ContextAwareViewRender,premLens: RequestContextLens<Permissions>) -> RoutingHttpHandler =
     { operationHolder, htmlView,permissionLens ->
         routes(
-            "/viewBusinessman" bind Method.GET to permissionFilter(permissionLens, Permissions::canAddInvestment).then(listBusinessmanViewHandler(
+            "/viewBusinessman" bind Method.GET to listBusinessmanViewHandler(
                 operationHolder.usersList,
                 operationHolder.listProjectsOperation,
                 htmlView
-            )),
-            "/viewBusinessman/{id}" bind Method.GET to detailedBusinessmanHandler(
+            ),
+            "/viewBusinessman/{id}" bind Method.GET to permissionFilter(permissionLens, Permissions::canViewBusinessmans).then(detailedBusinessmanHandler(
                 operationHolder.listProjectsOperation,
                 operationHolder.userFetch,
                 operationHolder.fetchInvestments,
                 htmlView
-            ),
+            )),
             //"/addBusinessman" bind Method.GET to addBusinessmanViewHandler(htmlView),
            // "/addBusinessman" bind Method.POST to addBusinessmanFormHandler(htmlView, operationHolder.addBusinessman)
         )

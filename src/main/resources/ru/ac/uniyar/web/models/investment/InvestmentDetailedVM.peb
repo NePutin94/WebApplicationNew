@@ -5,7 +5,7 @@
         <div class="grid-y ">
             <div class="cell">
                 <h2><a
-                        href="/viewProjects/{{ model.investment.project.id }}?backUri=/viewInvestment/{{ model.investment.id }}">
+                        href="/viewProjects/{{ model.investment.project.id }}">
                     Инвестиция в {{ model.investment.project.name }}</a></h2>
             </div>
             <div class="cell">

@@ -9,7 +9,6 @@ import ru.ac.uniyar.domain.entities.Project
 import ru.ac.uniyar.domain.entities.TypesEnum
 import ru.ac.uniyar.domain.operations.commands.ProjectAddOperation
 import ru.ac.uniyar.domain.operations.commands.UserUpdateOperation
-import ru.ac.uniyar.domain.operations.queries.BusinessmanListOperation
 import ru.ac.uniyar.util.ContextAwareViewRender
 import ru.ac.uniyar.web.context.UsetState
 import ru.ac.uniyar.web.filters.ProjectFilters
@@ -17,25 +16,22 @@ import ru.ac.uniyar.web.models.project.ProjectAddVM
 import java.time.LocalDateTime
 
 fun addProjectViewHandler(
-    context: RequestContextLens<UsetState?>,
+    contextLens: RequestContextLens<UsetState?>,
     htmlView: ContextAwareViewRender
 ): HttpHandler = { request ->
-    val userC = context(request)!!
-    //val seletedB = Query.string().defaulted("businessman", "None")(request)
-    val viewModel = ProjectAddVM(userC.name)
+    val userC = contextLens(request)!!
+    val viewModel = ProjectAddVM(userC.user.name)
     Response(Status.OK).with(htmlView(request) of viewModel)
 }
 
 fun addProjectFormHandler(
-    context: RequestContextLens<UsetState?>,
+    contextLens: RequestContextLens<UsetState?>,
     userUpdate: UserUpdateOperation,
     projectAddOperation: ProjectAddOperation,
     htmlView: ContextAwareViewRender
 ): HttpHandler = { request ->
     val validForm = ProjectFilters.projectLens(request)
-    val userC = context(request)!!
-    // val seletedB = Query.string().defaulted("businessman", "None")(request)
-    //val businessmans = businessmanListOperation.list()
+    val userC = contextLens(request)!!
     if (validForm.errors.isEmpty()) {
         val fname = ProjectFilters.nameField(validForm).trim()
         val fdesc = ProjectFilters.descField(validForm).trim()
@@ -59,7 +55,6 @@ fun addProjectFormHandler(
         val viewModel = ProjectAddVM(
             "",
             validForm,
-            // if (seletedB == "None") "Выберите имя бизнесмена" else null
         )
         Response(Status.OK).with(htmlView(request) of viewModel)
     }

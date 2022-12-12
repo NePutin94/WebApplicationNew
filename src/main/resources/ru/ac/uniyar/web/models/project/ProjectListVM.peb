@@ -127,7 +127,7 @@
                                 {% else %}
                                 <p>{{ project.description}}</p>
                             {% endif %}
-                            <a href="/viewProjects/{{ project.id }}?backUri={{ model.uri4BackUri }}">Подробная
+                            <a href="/viewProjects/{{ project.id }}">Подробная
                                 информация.</a>
                         </div>
                     </div>

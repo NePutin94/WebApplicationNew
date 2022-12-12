@@ -22,11 +22,15 @@ fun detailedInvestmentViewHandler(
     htmlView: ContextAwareViewRender
 ): HttpHandler =
     { request ->
-        val investId = request.path("id")!!.toInt()
-        val backUri = BasicFilters.backUriField(request)?.replace("*", "?")?.replace("~", "&")
-        val investment = investmentFetchOperation.fetch(investId)!!
-        val viewModel = InvestmentDetailedVM(investment, backUri ?: "/viewInvestment")
-        Response(Status.OK).with(htmlView(request) of viewModel)
+        val investIdS = request.path("id")
+        if (investIdS == null) {
+            Response(Status.BAD_REQUEST)
+        } else {
+            val investId = investIdS.toInt()
+            val investment = investmentFetchOperation.fetch(investId)!!
+            val viewModel = InvestmentDetailedVM(investment)
+            Response(Status.OK).with(htmlView(request) of viewModel)
+        }
     }
 
 fun listInvestmentViewHandler(

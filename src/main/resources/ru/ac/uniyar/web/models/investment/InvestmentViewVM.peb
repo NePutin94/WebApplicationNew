@@ -47,10 +47,10 @@
                             {% for investment in model.investments %}
                         <tr>
                             <td>
-                                <a href="/viewProjects/{{ investment.project.id }}?backUri={{ model.uri4BackUri }}">{{ investment.project.name }}</a>
+                                <a href="/viewProjects/{{ investment.project.id }}">{{ investment.project.name }}</a>
                             </td>
                             <td>{{ investment.creationDate | date("yyyy-MM-dd', 'HH:mm") }}</td>
-                            <td><a href="/viewInvestment/{{ investment.id }}?backUri={{ model.uri4BackUri }}">Подробно</a></td>
+                            <td><a href="/viewInvestment/{{ investment.id }}">Подробно</a></td>
                         </tr>
                             {% endfor %}
                     </tbody>

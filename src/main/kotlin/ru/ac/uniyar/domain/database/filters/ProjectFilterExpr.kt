@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 fun makeProjectFilterExpr(
     businessmanId: Int?,
     fundSize: Int,
-    fundSizeOp: String?,
+    fundSizeOp: String,
     startDateL: LocalDateTime?,
     startDateR: LocalDateTime?,
     endDateL: LocalDateTime?,
@@ -20,7 +20,7 @@ fun makeProjectFilterExpr(
         //filterExpr = filterExpr.and(ProjectTable.businessman eq businessmanId)
     }
     if (fundSize != 0) {
-        filterExpr = when (fundSizeOp!!) {
+        filterExpr = when (fundSizeOp) {
             "<" -> {
                 filterExpr.and(ProjectTable.fundsize less fundSize)
             }

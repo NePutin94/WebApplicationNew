@@ -99,12 +99,12 @@ fun addStateFilter(
                         val currContext = contextLens(request)
                         val user: User =
                             if (currContext == null || currContext.user.id != userId!!.toInt()) {
-                                userFetch.fetch(userId!!.toInt())!!
+                                userFetch.fetch(userId!!.toInt())!! //throws an exception
                             } else
                                 currContext.user
                         val perm = setPerm(TypesEnum.fromInt(user.type.id))
                         next(
-                            request.with(contextLens of UsetState(user.name, user.id.toString(), user))
+                            request.with(contextLens of UsetState(user.id.toString(), user))
                                 .with(premLens of perm)
                         )
                     } catch (ex: Exception) //token has expired or token is invalid -> delete the cookie from the browser
@@ -130,12 +130,10 @@ fun addStateFilter(
 
 fun startWebServer(operationHolder: OperationHolder, appEnv: Environment, jwt: JwtTools) {
     val contexts = RequestContexts()
-    //val currentWorkerLens: RequestContextLens<UsetState?> = RequestContextKey.optional(contexts, "user")
     val contextLens = RequestContextKey.optional<UsetState>(contexts)
     val permLens = RequestContextKey.required<Permissions>(contexts)
     val renderer = ContextAwarePebbleTemplates().HotReload("src/main/resources/")
     val htmlView = ContextAwareViewRender.withContentType(renderer, TEXT_HTML)
-    //val printingApp: HttpHandler = errFilter(htmlView).then(appRoutes(operationHolder, htmlView, appEnv, jwt, contextLens))
     val htmlViewWithContext = htmlView
         .associateContextLens("context", contextLens)
 
@@ -150,7 +148,7 @@ fun startWebServer(operationHolder: OperationHolder, appEnv: Environment, jwt: J
 
 fun startApplication() {
 
-    val jwtGen = JwtTools("sadaszx", "Test", 60000)
+    val jwtGen = JwtTools("bvn%yW5*bd", "Co-financing", 80000)
     val defaultEnv = Environment.defaults(
         webPortLens of 9000,
     )
